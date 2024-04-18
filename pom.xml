@@ -7,46 +7,29 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>jar</packaging>
-	<groupId>redis.clients</groupId>
-	<artifactId>jedis</artifactId>
+	<groupId>io.jackey</groupId>
+	<artifactId>jackey</artifactId>
 	<version>5.2.0-SNAPSHOT</version>
 	<name>Jedis</name>
-	<description>Jedis is a blazingly small and sane Redis java client.</description>
-	<url>https://github.com/redis/jedis</url>
-
-	<mailingLists>
-		<mailingList>
-			<name>Jedis Mailing List</name>
-			<post>jedis_redis@googlegroups.com</post>
-			<archive>
-				https://groups.google.com/group/jedis_redis
-			</archive>
-		</mailingList>
-	</mailingLists>
+	<description>Java client for valkey.</description>
+	<url>https://github.com/jackey-io/jackey</url>
 
 	<licenses>
 		<license>
 			<name>MIT</name>
-			<url>https://github.com/redis/jedis/blob/master/LICENSE</url>
+			<url>https://github.com/jackey-io/jackey/blob/master/LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/redis/jedis/issues</url>
+		<url>https://github.com/jackey-io/jackey/issues</url>
 	</issueManagement>
-
-	<scm>
-		<connection>scm:git:git@github.com:redis/jedis.git</connection>
-		<url>scm:git:git@github.com:redis/jedis.git</url>
-		<developerConnection>scm:git:git@github.com:redis/jedis.git</developerConnection>
-		<tag>jedis-3.4.1</tag>
-	</scm>
 
 	<properties>
 		<github.global.server>github</github.global.server>
-		<jedis.module.name>redis.clients.jedis</jedis.module.name>
+		<jackey.module.name>io.jackey</jackey.module.name>
 		<slf4j.version>1.7.36</slf4j.version>
 		<resilience4j.version>1.7.1</resilience4j.version>
 		<jackson.version>2.17.0</jackson.version>
@@ -277,7 +260,7 @@
 					<archive>
 						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
 						<manifestEntries>
-							<Automatic-Module-Name>${jedis.module.name}</Automatic-Module-Name>
+							<Automatic-Module-Name>${jackey.module.name}</Automatic-Module-Name>
 						</manifestEntries>
 					</archive>
 				</configuration>
