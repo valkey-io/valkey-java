@@ -42,13 +42,10 @@ jobs:
           path: |
             ~/.m2/repository
             /var/cache/apt
-          key: jedis-${{hashFiles('**/pom.xml')}}
+          key: jackey-${{hashFiles('**/pom.xml')}}
       - name: Maven offline
         run: |
           mvn -q dependency:go-offline
-      - name: Build docs
-        run: |
-          mvn javadoc:jar
       - name: Run tests
         run: |
           make test

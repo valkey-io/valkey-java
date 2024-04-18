@@ -1,171 +1,158 @@
-# Jedis
-
-[![Release](https://img.shields.io/github/release/redis/jedis.svg?sort=semver)](https://github.com/redis/jedis/releases/latest)
-[![Maven Central](https://img.shields.io/maven-central/v/redis.clients/jedis.svg)](https://search.maven.org/artifact/redis.clients/jedis)
-[![Javadocs](https://www.javadoc.io/badge/redis.clients/jedis.svg)](https://www.javadoc.io/doc/redis.clients/jedis)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.txt)
-[![Integration](https://github.com/redis/jedis/actions/workflows/integration.yml/badge.svg?branch=master)](https://github.com/redis/jedis/actions/workflows/integration.yml)
-[![codecov](https://codecov.io/gh/redis/jedis/branch/master/graph/badge.svg?token=pAstxAAjYo)](https://codecov.io/gh/redis/jedis)
-[![Discord](https://img.shields.io/discord/697882427875393627?style=flat-square)](https://discord.gg/redis)
-
-## What is Jedis?
-
-Jedis is a Java client for [Redis](https://github.com/redis/redis "Redis") designed for performance and ease of use.
-
-Are you looking for a high-level library to handle object mapping? See [redis-om-spring](https://github.com/redis/redis-om-spring)!
-
-## How do I Redis?
-
-[Learn for free at Redis University](https://university.redis.com/)
-
-[Build faster with the Redis Launchpad](https://launchpad.redis.com/)
-
-[Try the Redis Cloud](https://redis.com/try-free/)
-
-[Dive in developer tutorials](https://developer.redis.com/)
-
-[Join the Redis community](https://redis.com/community/)
-
-[Work at Redis](https://redis.com/company/careers/jobs/)
-
-## Supported Redis versions
-
-The most recent version of this library supports redis version 
-[5.0](https://github.com/redis/redis/blob/5.0/00-RELEASENOTES), 
-[6.0](https://github.com/redis/redis/blob/6.0/00-RELEASENOTES), 
-[6.2](https://github.com/redis/redis/blob/6.2/00-RELEASENOTES), 
-[7.0](https://github.com/redis/redis/blob/7.0/00-RELEASENOTES) and 
-[7.2](https://github.com/redis/redis/blob/7.2/00-RELEASENOTES).
-
-The table below highlights version compatibility of the most-recent library versions and Redis versions. Compatibility means communication features, and Redis command capabilities.
+# Jackey
+Jackey is [Valkey](https://github.com/valkey-io/valkey)'s Java client, derived from [Jedis](https://github.com/redis/jedis) fork, dedicated to maintaining simplicity and high performance.
 
 
-| Jedis version | Supported Redis versions       | JDK Compatibility |
-|---------------|--------------------------------|-------------------|
-| 3.9+          | 5.0 and 6.2 Family of releases | 8, 11             |
-| >= 4.0        | Version 5.0 to current         | 8, 11, 17         |
-| >= 5.0        | Version 6.0 to current         | 8, 11, 17         |
-
-## Getting started
-
-To get started with Jedis, first add it as a dependency in your Java project. If you're using Maven, that looks like this:
-
-```xml
+# Getting started
+Add the following dependencies to your `pom.xml` file:
+```
 <dependency>
-    <groupId>redis.clients</groupId>
-    <artifactId>jedis</artifactId>
-    <version>5.0.0</version>
+    <groupId>io.jackey</groupId>
+    <artifactId>jackey</artifactId>
+    <version>5.2.0-SNAPSHOT</version>
 </dependency>
 ```
 
-To use the cutting-edge Jedis, check [here](/docs/jedis-maven.md).
-
-Next, you'll need to connect to Redis. Consider installing a redis-stack docker:
-
-```bash
-docker run -p 6379:6379 -it redis/redis-stack:latest
-```
-
-For many applications, it's best to use a connection pool. You can instantiate a Jedis connection pool like so:
-
+## Connect to Valkey
 ```java
-JedisPool pool = new JedisPool("localhost", 6379);
-```
-
-With a `JedisPool` instance, you can use a
-[try-with-resources](https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
-block to get a connection and run Redis commands.
-
-Here's how to run a single [SET](https://redis.io/commands/set) command within a *try-with-resources* block:
-
-```java
-try (Jedis jedis = pool.getResource()) {
-  jedis.set("clientName", "Jedis");
+public class JackeyTest {
+    // can be static or singleton, thread safety.
+    private static io.jackey.JedisPool jedisPool;
+    
+    public static void main(String[] args) {
+        io.jackey.JedisPoolConfig config = new io.jackey.JedisPoolConfig();
+        // It is recommended that you set maxTotal = maxIdle = 2*minIdle for best performance
+        config.setMaxTotal(32);
+        config.setMaxIdle(32);
+        config.setMinIdle(16);
+        jedisPool = new io.jackey.JedisPool(config, <host>, <port>, <timeout>, <password>);
+        try (io.jackey.Jedis jedis = jedisPool.getResource()) {
+            jedis.set("key", "value");
+            System.out.println(jedis.get("key"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        jedisPool.close(); // when app exit, close the resource.
+    }
 }
 ```
 
-`Jedis` instances implement most Redis commands. See the
-[Jedis Javadocs](https://www.javadoc.io/doc/redis.clients/jedis/latest/redis/clients/jedis/Jedis.html)
-for the complete list of supported commands.
-
-### Easier way of using connection pool
-
-Using a *try-with-resources* block for each command may be cumbersome, so you may consider using JedisPooled.
-
+## Connect to the Valkey cluster
 ```java
-JedisPooled jedis = new JedisPooled("localhost", 6379);
+import java.util.HashSet;
+import java.util.Set;
+import io.jackey.HostAndPort;
+
+public class JackeyClusterTest {
+    private static final int DEFAULT_TIMEOUT = 2000;
+    private static final int DEFAULT_REDIRECTIONS = 5;
+    private static io.jackey.JedisCluster jc; // be static or singleton, thread safety.
+
+    public static void main(String[] args) {
+        io.jackey.ConnectionPoolConfig config = new io.jackey.ConnectionPoolConfig();
+        // It is recommended that you set maxTotal = maxIdle = 2*minIdle for best performance
+        // In cluster mode, please note that each business machine will contain up to maxTotal links,
+        // and the total number of connections = maxTotal * number of machines
+        config.setMaxTotal(32);
+        config.setMaxIdle(32);
+        config.setMinIdle(16);
+
+        Set<HostAndPort> jedisClusterNode = new HashSet<HostAndPort>();
+        jedisClusterNode.add(new HostAndPort(host, port));
+        jc = new io.jackey.JedisCluster(jedisClusterNode, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT, DEFAULT_REDIRECTIONS,
+            password, null, config);
+
+        jc.set("key", "value"); // Note that there is no need to call jc.close() here, 
+                                // the connection recycling is actively completed internally.
+        System.out.println(jc.get("key"));
+
+        jc.close(); // when app exit, close the resource.
+    }
+}
 ```
 
-Now you can send commands like sending from Jedis.
-
+## Connect using TLS method
 ```java
-jedis.sadd("planets", "Venus");
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+
+public class JackeySSLTest {
+    private static SSLSocketFactory createTrustStoreSSLSocketFactory(String jksFile) throws Exception {
+        KeyStore trustStore = KeyStore.getInstance("jks");
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(jksFile);
+            trustStore.load(inputStream, null);
+        } finally {
+            inputStream.close();
+        }
+
+        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("PKIX");
+        trustManagerFactory.init(trustStore);
+        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, trustManagers, new SecureRandom());
+        return sslContext.getSocketFactory();
+    }
+
+    public static void main(String[] args) throws Exception {
+        // When you don't have a jks file, just set sslSocketFactory to null.
+        final SSLSocketFactory sslSocketFactory = createTrustStoreSSLSocketFactory(<your_jks_file_path>);
+        io.jackey.JedisPool jedisPool = new io.jackey.JedisPool(new GenericObjectPoolConfig(), <host>,
+            <port>, <timeout>, <password>, 0, true, sslSocketFactory, null, null);
+
+        try (io.jackey.Jedis jedis = pool.getResource()) {
+            jedis.set("key", "value");
+            System.out.println(jedis.get("key"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        jedisPool.close(); // when app exit, close the resource.
+    }
+}
 ```
 
-## Connecting to a Redis cluster
+# Pool Configuration
+The following are the common parameters of apache common-pool and their meanings：
 
-Jedis lets you connect to Redis Clusters, supporting the [Redis Cluster Specification](https://redis.io/topics/cluster-spec).
-To do this, you'll need to connect using `JedisCluster`. See the example below:
+| Parameter | Meanings                                                                                                                                                                                                         | Default value | Recommended value              |
+| --- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|--------------------------------|
+|connectionTimeout| Initialize the timeout period for connecting to the cluster, such as the timeout period for reconnecting the cluster at startup and after the TCP connect is disconnected.                                       | 2000          | 5000                           |
+|soTimeout| The timeout period for API access. For example, the timeout period for operations such as set and get.                                                                                                           | 2000          | 2000                           |
+|maxTotal/maxIdle/minIdle | standalone mode: the connection to redis; cluster mode: The number of connections to a node in the cluster                                                                                                       | 8，8，0         | MaxTotal = MaxIdle = 2*MinIdle |
+|blockWhenExhausted| When the resource pool is used up, whether the caller needs to wait or not. If not, an exception with insufficient connection is returned. The following maxWaitMillis takes effect only when the value is true. | true          | true                           |
+|maxWaitMillis| The maximum wait time (in milliseconds) of the caller when the resource pool connection is exhausted.                                                                                                            | -1            | depending on your business     |
+|testOnBorrow| Whether to check the validity of the connection (send the ping command) when borrowing the connection from the resource pool. The detected invalid connection will be removed.                                   | false         | false                          |
+|testOnReturn| Whether to check the validity of the connection (send a ping command) when returning the connection to the resource pool. The detected invalid connection will be removed.                                       | false         | false                          |
+|testOnCreate| If you create a new connection when borrowing a connection, we recommend that you disable it if you check whether the connection validity is performed (send a ping command).                                    | false         | false                          |
+|testWhileIdle| Whether to check the validity of the connection (send a ping command) when detecting idle connections. If the connection is invalid, it will be closed.                                                          | true          | true                           |
+|timeBetweenEvictionRunsMillis| The detection period of idle resources. Unit: milliseconds.                                                                                                                                                      | 30000         | 30000                          |
+|minEvictableIdleTimeMillis| The minimum idle time (in milliseconds) of resources in the resource pool. When this value is reached, idle resources are removed. Unit: milliseconds.| 60000         | 60000                          |
+|numTestsPerEvictionRun|The number of resources that are detected each time when idle resources are detected.| -1            | -1                             |
+|evictionPolicy|Set the evict class, including the elimination algorithm. The default implementation is DefaultEvictionPolicy, which is eliminated according to the idle time.|         DefaultEvictionPolicy      |     DefaultEvictionPolicy                           |
+|evictionPolicyClassName|Set the evict class name. The default implementation is DefaultEvictionPolicy, which is eliminated according to the idle time.|      DefaultEvictionPolicy         |         DefaultEvictionPolicy                       |
+|evictorShutdownTimeoutMillis|The default waiting time when you exit the evictor.Unit: milliseconds.    |       10000        |                  10000              |
+|fairness|When the connection pool is exhausted, multiple threads may block waiting for resources. If the fairness is true, threads can obtain resources in sequence.|        false       |           false                     |
+|lifo|When multiple connections are available in the connection pool, a connection is selected based on this value. (Last in, First out)|         true      |        true                        |
 
-```java
-Set<HostAndPort> jedisClusterNodes = new HashSet<HostAndPort>();
-jedisClusterNodes.add(new HostAndPort("127.0.0.1", 7379));
-jedisClusterNodes.add(new HostAndPort("127.0.0.1", 7380));
-JedisCluster jedis = new JedisCluster(jedisClusterNodes);
-```
+# Roadmap
+The following is what we plan to complete in the future
+1. Support new API for Valkey
+2. Support asynchronous
+3. Reduce the number of client links in cluster mode
+4. Tracing mode can record the access latency of each API.
 
-Now you can use the `JedisCluster` instance and send commands like you would with a standard pooled connection:
+# Contribution
+Contributions are always welcome. If you discover bugs or have new ideas, please open the issue or submit a PR.
 
-```java
-jedis.sadd("planets", "Mars");
-```
-
-## Using Redis modules
-
-Jedis includes support for [Redis modules](https://redis.io/docs/modules/) such as
-[RedisJSON](https://oss.redis.com/redisjson/) and [RediSearch](https://oss.redis.com/redisearch/).
-
-See the [RedisJSON Jedis](docs/redisjson.md) or [RediSearch Jedis](docs/redisearch.md) for details.
-
-## Failover
-
-Jedis supports retry and failover for your Redis deployments. This is useful when:
-
-1. You have more than one Redis deployment. This might include two independent Redis servers or two or more Redis databases replicated across multiple [active-active Redis Enterprise](https://docs.redis.com/latest/rs/databases/active-active/) clusters.
-2. You want your application to connect to one deployment at a time and to fail over to the next available deployment if the first deployment becomes unavailable.
-
-For the complete failover configuration options and examples, see the [Jedis failover docs](docs/failover.md).
-
-## Documentation
-
-The [Jedis wiki](http://github.com/redis/jedis/wiki) contains several useful articles for using Jedis.
-
-You can also check the [latest Jedis Javadocs](https://www.javadoc.io/doc/redis.clients/jedis/latest/index.html).
-
-Some specific use-case examples can be found in [`redis.clients.jedis.examples`
-package](src/test/java/redis/clients/jedis/examples/) of the test source codes.
-
-## Troubleshooting
-
-If you run into trouble or have any questions, we're here to help!
-
-Hit us up on the [Redis Discord Server](http://discord.gg/redis) or 
-[Jedis GitHub Discussions](https://github.com/redis/jedis/discussions) or 
-[Jedis mailing list](http://groups.google.com/group/jedis_redis).
-
-## Contributing
-
-We'd love your contributions!
-
-Bug reports are always welcome! [You can open a bug report on GitHub](https://github.com/redis/jedis/issues/new).
-
-You can also contribute documentation -- or anything to improve Jedis. Please see
-[contribution guideline](https://github.com/redis/jedis/blob/master/.github/CONTRIBUTING.md) for more details.
-
-## License
-
-Jedis is licensed under the [MIT license](https://github.com/redis/jedis/blob/master/LICENSE).
-
-## Sponsorship
-
-[![Redis Logo](redis-logo-full-color-rgb.png)](https://redis.com/)
+# LICENSE
+[MIT](LICENSE)
