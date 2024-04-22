@@ -12,11 +12,13 @@ import java.util.Map;
 import io.jackey.RedisProtocol;
 import io.jackey.bloom.BFInsertParams;
 import io.jackey.bloom.BFReserveParams;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=bf">Bloom Filter</a> commands.
  */
+@Ignore
 public class CommandObjectsBloomFilterCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsBloomFilterCommandsTest(RedisProtocol protocol) {

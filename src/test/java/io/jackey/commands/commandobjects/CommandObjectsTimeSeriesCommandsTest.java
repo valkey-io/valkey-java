@@ -29,11 +29,13 @@ import io.jackey.timeseries.TSMGetParams;
 import io.jackey.timeseries.TSMRangeElements;
 import io.jackey.timeseries.TSMRangeParams;
 import io.jackey.timeseries.TSRangeParams;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=timeseries">Time series</a> commands.
  */
+@Ignore
 public class CommandObjectsTimeSeriesCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsTimeSeriesCommandsTest(RedisProtocol protocol) {

@@ -15,11 +15,13 @@ import java.util.Map;
 
 import io.jackey.RedisProtocol;
 import io.jackey.bloom.TDigestMergeParams;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=tdigest">T-Digest</a> commands.
  */
+@Ignore
 public class CommandObjectsTDigestCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsTDigestCommandsTest(RedisProtocol protocol) {

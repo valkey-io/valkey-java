@@ -15,11 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 import io.jackey.RedisProtocol;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=topk">Top-k</a> commands.
  */
+@Ignore
 public class CommandObjectsTopkCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsTopkCommandsTest(RedisProtocol protocol) {

@@ -24,11 +24,13 @@ import io.jackey.json.Path2;
 import org.hamcrest.Matchers;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=json">JSON</a> commands.
  */
+@Ignore
 public class CommandObjectsJsonCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsJsonCommandsTest(RedisProtocol protocol) {

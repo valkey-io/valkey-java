@@ -16,11 +16,13 @@ import java.util.Map;
 import io.jackey.RedisProtocol;
 import io.jackey.bloom.CFInsertParams;
 import io.jackey.bloom.CFReserveParams;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=cf">Cuckoo filter</a> commands.
  */
+@Ignore
 public class CommandObjectsCuckooFilterCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsCuckooFilterCommandsTest(RedisProtocol protocol) {

@@ -129,7 +129,7 @@ public class ClientCommandsTest extends JedisCommandsTestBase {
       Assert.assertEquals(1, jedis.clientUnblock(clientId, UnblockType.ERROR));
       future.get(1, TimeUnit.SECONDS);
     } catch (ExecutionException e) {
-      assertEquals("redis.clients.jedis.exceptions.JedisDataException: UNBLOCKED client unblocked via CLIENT UNBLOCK", e.getMessage());
+      assertTrue(e.getMessage().contains("UNBLOCKED client unblocked via CLIENT UNBLOCK"));
     }
   }
 

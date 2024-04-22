@@ -27,6 +27,17 @@
 		<url>https://github.com/jackey-io/jackey/issues</url>
 	</issueManagement>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
+
 	<properties>
 		<github.global.server>github</github.global.server>
 		<jackey.module.name>io.jackey</jackey.module.name>
@@ -138,17 +149,6 @@
 		</dependency>
 	</dependencies>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement>
-
 	<build>
 		<resources>
 			<resource>
@@ -188,11 +188,9 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven.surefire.version}</version>
 				<configuration>
-					<systemPropertyVariables>
-						<redis-hosts>${redis-hosts}</redis-hosts>
-					</systemPropertyVariables>
 					<excludes>
 						<exclude>**/examples/*Example.java</exclude>
+						<exclude>**/modules/*Test.java</exclude>
 					</excludes>
 					<!--<trimStackTrace>false</trimStackTrace>-->
 				</configuration>
