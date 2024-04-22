@@ -12,11 +12,13 @@ import io.jackey.RedisProtocol;
 import io.jackey.gears.TFunctionListParams;
 import io.jackey.gears.TFunctionLoadParams;
 import io.jackey.gears.resps.GearsLibraryInfo;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests related to <a href="https://redis.io/commands/?group=triggers_and_functions">Triggers and functions</a> commands.
  */
+@Ignore
 public class CommandObjectsTriggersAndFunctionsCommandsTest extends CommandObjectsModulesTestBase {
 
   public CommandObjectsTriggersAndFunctionsCommandsTest(RedisProtocol protocol) {

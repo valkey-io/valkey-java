@@ -530,9 +530,9 @@ public class AccessControlListCommandsTest extends JedisCommandsTestBase {
   public void aclLoadTest() {
     try {
       jedis.aclLoad();
-      fail("Should throw a JedisDataException: ERR This Redis instance is not configured to use an ACL file...");
+      fail("Should throw a JedisDataException: ERR This instance is not configured to use an ACL file...");
     } catch (JedisDataException e) {
-      assertThat(e.getMessage(), startsWith("ERR This Redis instance is not configured to use an ACL file."));
+      assertThat(e.getMessage(), startsWith("ERR This instance is not configured to use an ACL file."));
     }
 
     // TODO test with ACL file
@@ -542,9 +542,9 @@ public class AccessControlListCommandsTest extends JedisCommandsTestBase {
   public void aclSaveTest() {
     try {
       jedis.aclSave();
-      fail("Should throw a JedisDataException: ERR This Redis instance is not configured to use an ACL file...");
+      fail("Should throw a JedisDataException: ERR This instance is not configured to use an ACL file...");
     } catch (JedisDataException e) {
-      assertThat(e.getMessage(), startsWith("ERR This Redis instance is not configured to use an ACL file."));
+      assertThat(e.getMessage(), startsWith("ERR This instance is not configured to use an ACL file."));
     }
 
     // TODO test with ACL file

@@ -13,6 +13,7 @@ save ""
 appendonly no
 enable-module-command yes
 client-output-buffer-limit pubsub 256k 128k 5
+extended-redis-compatibility yes
 endef
 
 define VALKEY2_CONF
@@ -24,6 +25,7 @@ pidfile /tmp/valkey2.pid
 logfile /tmp/valkey2.log
 save ""
 appendonly no
+extended-redis-compatibility yes
 endef
 
 define VALKEY3_CONF
@@ -36,6 +38,7 @@ pidfile /tmp/valkey3.pid
 logfile /tmp/valkey3.log
 save ""
 appendonly no
+extended-redis-compatibility yes
 endef
 
 define VALKEY4_CONF
@@ -49,6 +52,7 @@ logfile /tmp/valkey4.log
 save ""
 appendonly no
 slaveof localhost 6381
+extended-redis-compatibility yes
 endef
 
 define VALKEY5_CONF
@@ -62,6 +66,7 @@ logfile /tmp/valkey5.log
 save ""
 appendonly no
 slaveof localhost 6379
+extended-redis-compatibility yes
 endef
 
 define VALKEY6_CONF
@@ -74,6 +79,7 @@ pidfile /tmp/valkey6.pid
 logfile /tmp/valkey6.log
 save ""
 appendonly no
+extended-redis-compatibility yes
 endef
 
 define VALKEY7_CONF
@@ -87,6 +93,7 @@ logfile /tmp/valkey7.log
 save ""
 appendonly no
 slaveof localhost 6384
+extended-redis-compatibility yes
 endef
 
 define VALKEY8_CONF
@@ -98,6 +105,7 @@ logfile /tmp/valkey8.log
 save ""
 appendonly no
 maxmemory-policy allkeys-lfu
+extended-redis-compatibility yes
 endef
 
 define VALKEY9_CONF
@@ -111,6 +119,7 @@ logfile /tmp/valkey9.log
 save ""
 appendonly no
 client-output-buffer-limit pubsub 256k 128k 5
+extended-redis-compatibility yes
 endef
 
 define VALKEY10_CONF
@@ -121,6 +130,7 @@ pidfile /tmp/valkey10.pid
 logfile /tmp/valkey10.log
 save ""
 appendonly no
+extended-redis-compatibility yes
 endef
 
 define VALKEY11_CONF
@@ -132,6 +142,7 @@ logfile /tmp/valkey11.log
 save ""
 appendonly no
 replicaof localhost 6388
+extended-redis-compatibility yes
 endef
 
 # SENTINELS
@@ -216,6 +227,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_cluster_node1.conf
+extended-redis-compatibility yes
 endef
 
 define VALKEY_CLUSTER_NODE2_CONF
@@ -230,6 +242,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_cluster_node2.conf
+extended-redis-compatibility yes
 endef
 
 define VALKEY_CLUSTER_NODE3_CONF
@@ -244,6 +257,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_cluster_node3.conf
+extended-redis-compatibility yes
 endef
 
 define VALKEY_CLUSTER_NODE4_CONF
@@ -258,6 +272,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_cluster_node4.conf
+extended-redis-compatibility yes
 endef
 
 define VALKEY_CLUSTER_NODE5_CONF
@@ -272,6 +287,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_cluster_node5.conf
+extended-redis-compatibility yes
 endef
 
 # STABLE CLUSTER VALKEY NODES
@@ -288,6 +304,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_stable_cluster_node1.conf
+extended-redis-compatibility yes
 endef
 
 define VALKEY_STABLE_CLUSTER_NODE2_CONF
@@ -302,6 +319,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_stable_cluster_node2.conf
+extended-redis-compatibility yes
 endef
 
 define VALKEY_STABLE_CLUSTER_NODE3_CONF
@@ -316,6 +334,7 @@ save ""
 appendonly no
 cluster-enabled yes
 cluster-config-file /tmp/valkey_stable_cluster_node3.conf
+extended-redis-compatibility yes
 endef
 
 # UDS VALKEY NODES
@@ -329,6 +348,7 @@ unixsocket /tmp/valkey_uds.sock
 unixsocketperm 777
 save ""
 appendonly no
+extended-redis-compatibility yes
 endef
 
 # UNAVAILABLE VALKEY NODES

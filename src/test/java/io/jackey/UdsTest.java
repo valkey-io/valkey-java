@@ -45,7 +45,7 @@ public class UdsTest {
 
   private static class UdsJedisSocketFactory implements JedisSocketFactory {
 
-    private static final File UDS_SOCKET = new File("/tmp/redis_uds.sock");
+    private static final File UDS_SOCKET = new File("/tmp/valkey_uds.sock");
 
     @Override
     public Socket createSocket() throws JedisConnectionException {
