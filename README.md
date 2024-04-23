@@ -8,7 +8,7 @@ Add the following dependencies to your `pom.xml` file:
 <dependency>
     <groupId>io.jackey</groupId>
     <artifactId>jackey</artifactId>
-    <version>5.2.0-SNAPSHOT</version>
+    <version>5.2.0</version>
 </dependency>
 ```
 
