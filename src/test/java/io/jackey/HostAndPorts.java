@@ -11,23 +11,25 @@ public final class HostAndPorts {
   private static List<HostAndPort> stableClusterHostAndPortList = new ArrayList<>();
 
   static {
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 1));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 2));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 3));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 4));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 5));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 6));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 7));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 8));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 9));
-    redisHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_PORT + 10));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6379));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6380));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6381));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6382));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6383));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6384));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6385));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6386));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6387));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6388));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6389));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6391));
+    redisHostAndPortList.add(new HostAndPort("localhost", 6392));
 
-    sentinelHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_SENTINEL_PORT));
-    sentinelHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_SENTINEL_PORT + 1));
-    sentinelHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_SENTINEL_PORT + 2));
-    sentinelHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_SENTINEL_PORT + 3));
-    sentinelHostAndPortList.add(new HostAndPort("localhost", Protocol.DEFAULT_SENTINEL_PORT + 4));
+    sentinelHostAndPortList.add(new HostAndPort("localhost", 26379));
+    sentinelHostAndPortList.add(new HostAndPort("localhost", 26380));
+    sentinelHostAndPortList.add(new HostAndPort("localhost", 26381));
+    sentinelHostAndPortList.add(new HostAndPort("localhost", 26382));
+    sentinelHostAndPortList.add(new HostAndPort("localhost", 26383));
 
     clusterHostAndPortList.add(new HostAndPort("localhost", 7379));
     clusterHostAndPortList.add(new HostAndPort("localhost", 7380));

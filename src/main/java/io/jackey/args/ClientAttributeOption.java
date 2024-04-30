@@ -3,12 +3,13 @@ package io.jackey.args;
 import io.jackey.util.SafeEncoder;
 
 /**
- * CLIENT SETINFO command attr option
+ * CLIENT command attr option
  * since redis 7.2
  */
 public enum ClientAttributeOption implements Rawable {
     LIB_NAME("LIB-NAME"),
-    LIB_VER("LIB-VER");
+    LIB_VER("LIB-VER"),
+    REDIRECT("REDIRECT");
 
     private final byte[] raw;
 

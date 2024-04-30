@@ -145,6 +145,29 @@ replicaof localhost 6388
 extended-redis-compatibility yes
 endef
 
+define VALKEY12_CONF
+daemonize yes
+protected-mode no
+port 6391
+pidfile /tmp/valkey12.pid
+logfile /tmp/valkey12.log
+save ""
+appendonly no
+extended-redis-compatibility yes
+endef
+
+define VALKEY13_CONF
+daemonize yes
+protected-mode no
+port 6392
+pidfile /tmp/valkey13.pid
+logfile /tmp/valkey13.log
+save ""
+appendonly no
+replicaof localhost 6391
+extended-redis-compatibility yes
+endef
+
 # SENTINELS
 define VALKEY_SENTINEL1
 port 26379
@@ -409,6 +432,8 @@ export VALKEY8_CONF
 export VALKEY9_CONF
 export VALKEY10_CONF
 export VALKEY11_CONF
+export VALKEY12_CONF
+export VALKEY13_CONF
 export VALKEY_SENTINEL1
 export VALKEY_SENTINEL2
 export VALKEY_SENTINEL3
@@ -445,6 +470,8 @@ start: stunnel cleanup compile-module
 	echo "$$VALKEY9_CONF" | valkey-server -
 	echo "$$VALKEY10_CONF" | valkey-server -
 	echo "$$VALKEY11_CONF" | valkey-server -
+	echo "$$VALKEY12_CONF" | valkey-server -
+	echo "$$VALKEY13_CONF" | valkey-server -
 	echo "$$VALKEY_SENTINEL1" > /tmp/sentinel1.conf && valkey-server /tmp/sentinel1.conf --sentinel
 	@sleep 0.5
 	echo "$$VALKEY_SENTINEL2" > /tmp/sentinel2.conf && valkey-server /tmp/sentinel2.conf --sentinel
@@ -465,6 +492,7 @@ start: stunnel cleanup compile-module
 	echo "$$VALKEY_STABLE_CLUSTER_NODE3_CONF" | valkey-server -
 	echo "$$VALKEY_UDS" | valkey-server -
 	echo "$$VALKEY_UNAVAILABLE_CONF" | valkey-server -
+	@sleep 0.5
 	valkey-cli -a cluster --cluster create 127.0.0.1:7479 127.0.0.1:7480 127.0.0.1:7481 --cluster-yes
 cleanup:
 	- rm -vf /tmp/valkey_cluster_node*.conf 2>/dev/null
@@ -487,6 +515,8 @@ stop:
 	kill `cat /tmp/valkey9.pid`
 	kill `cat /tmp/valkey10.pid`
 	kill `cat /tmp/valkey11.pid`
+	kill `cat /tmp/valkey12.pid`
+	kill `cat /tmp/valkey13.pid`
 	kill `cat /tmp/sentinel1.pid`
 	kill `cat /tmp/sentinel2.pid`
 	kill `cat /tmp/sentinel3.pid`
@@ -517,7 +547,22 @@ stop:
 	rm -f /tmp/valkey_stable_cluster_node2.conf
 	rm -f /tmp/valkey_stable_cluster_node3.conf
 
-test: | start mvn-test stop
+show-log:
+	echo "====== valkey1.log =======" && cat /tmp/valkey1.log
+	echo "====== valkey2.log =======" && cat /tmp/valkey2.log
+	echo "====== valkey3.log =======" && cat /tmp/valkey3.log
+	echo "====== valkey4.log =======" && cat /tmp/valkey4.log
+	echo "====== valkey5.log =======" && cat /tmp/valkey5.log
+	echo "====== valkey6.log =======" && cat /tmp/valkey6.log
+	echo "====== valkey7.log =======" && cat /tmp/valkey7.log
+	echo "====== valkey8.log =======" && cat /tmp/valkey8.log
+	echo "====== valkey9.log =======" && cat /tmp/valkey9.log
+	echo "====== valkey10.log =======" && cat /tmp/valkey10.log
+	echo "====== valkey11.log =======" && cat /tmp/valkey11.log
+	echo "====== valkey12.log =======" && cat /tmp/valkey12.log
+	echo "====== valkey13.log =======" && cat /tmp/valkey13.log
+
+test: | start show-log mvn-test stop
 
 mvn-test:
 	mvn -Dtest=${SKIP_SSL}${TEST} clean compile test
