@@ -9,12 +9,12 @@
 
 	<name>jackey</name>
 	<description>Java client for valkey.</description>
-	<url>https://github.com/jackey-io/jackey</url>
+	<url>https://github.com/valkey-io/jackey</url>
 
 	<licenses>
 		<license>
 			<name>MIT</name>
-			<url>https://github.com/jackey-io/jackey/blob/master/LICENSE</url>
+			<url>https://github.com/valkey-io/jackey/blob/master/LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -27,15 +27,15 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/jackey-io/jackey</url>
-		<connection>scm:https://github.com/jackey-io/jackey.git</connection>
-		<developerConnection>scm:git:https://github.com/jackey-io/jackey.git</developerConnection>
+		<url>https://github.com/valkey-io/jackey</url>
+		<connection>scm:https://github.com/valkey-io/jackey.git</connection>
+		<developerConnection>scm:git:https://github.com/valkeykey-io/jackey.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/jackey-io/jackey/issues</url>
+		<url>https://github.com/valkey-io/jackey/issues</url>
 	</issueManagement>
 
 	<properties>
