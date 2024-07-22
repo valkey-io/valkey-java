@@ -84,6 +84,10 @@ public class Connection implements Closeable {
     return ((DefaultJedisSocketFactory) socketFactory).getHostAndPort();
   }
 
+  public final ConnectionPool getMemberOf() {
+    return memberOf;
+  }
+
   public int getSoTimeout() {
     return soTimeout;
   }
@@ -414,6 +418,7 @@ public class Connection implements Closeable {
         fireAndForgetMsg.add(new CommandArguments(Command.CLIENT).add(Keyword.SETNAME).add(clientName));
       }
 
+      // CLIENT SETINFO LIB-NAME & LIB-VER
       ClientSetInfoConfig setInfoConfig = config.getClientSetInfoConfig();
       if (setInfoConfig == null) setInfoConfig = ClientSetInfoConfig.DEFAULT;
 
@@ -432,6 +437,16 @@ public class Connection implements Closeable {
         if (libVersion != null && validateClientInfo(libVersion)) {
           fireAndForgetMsg.add(new CommandArguments(Command.CLIENT).add(Keyword.SETINFO)
               .add(ClientAttributeOption.LIB_VER.getRaw()).add(libVersion));
+        }
+      }
+
+      // CLIENT CAPA REDIRECT
+      ClientCapaConfig capaConfig = config.getClientCapaConfig();
+      if (capaConfig == null) capaConfig = ClientCapaConfig.DEFAULT;
+      if (!capaConfig.isDisabled()) {
+        if (capaConfig.isRedirect()) {
+          fireAndForgetMsg.add(new CommandArguments(Command.CLIENT).add(Keyword.CAPA)
+              .add(ClientAttributeOption.REDIRECT.getRaw()));
         }
       }
 

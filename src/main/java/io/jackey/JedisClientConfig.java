@@ -87,4 +87,8 @@ public interface JedisClientConfig {
   default ClientSetInfoConfig getClientSetInfoConfig() {
     return ClientSetInfoConfig.DEFAULT;
   }
+
+  default ClientCapaConfig getClientCapaConfig() {
+    return ClientCapaConfig.DEFAULT;
+  }
 }
