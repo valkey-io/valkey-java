@@ -3,18 +3,18 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>jar</packaging>
-	<groupId>io.jackey</groupId>
-	<artifactId>jackey</artifactId>
+	<groupId>io.valkey</groupId>
+	<artifactId>valkey-java</artifactId>
 	<version>5.2.0</version>
 
-	<name>jackey</name>
+	<name>valkey-java</name>
 	<description>Java client for valkey.</description>
-	<url>https://github.com/valkey-io/jackey</url>
+	<url>https://github.com/valkey-io/valkey-java</url>
 
 	<licenses>
 		<license>
 			<name>MIT</name>
-			<url>https://github.com/valkey-io/jackey/blob/master/LICENSE</url>
+			<url>https://github.com/valkey-io/valkey-java/blob/master/LICENSE</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -27,20 +27,19 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/valkey-io/jackey</url>
-		<connection>scm:https://github.com/valkey-io/jackey.git</connection>
-		<developerConnection>scm:git:https://github.com/valkeykey-io/jackey.git</developerConnection>
+		<url>https://github.com/valkey-io/valkey-java</url>
+		<connection>scm:https://github.com/valkey-io/valkey-java.git</connection>
+		<developerConnection>scm:git:https://github.com/valkeykey-io/valkey-java.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/valkey-io/jackey/issues</url>
+		<url>https://github.com/valkey-io/valkey-java/issues</url>
 	</issueManagement>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<jackey.module.name>io.jackey</jackey.module.name>
 		<slf4j.version>1.7.36</slf4j.version>
 		<resilience4j.version>1.7.1</resilience4j.version>
 		<jackson.version>2.17.0</jackson.version>

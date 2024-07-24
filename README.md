@@ -1,31 +1,32 @@
-# Jackey
-Jackey is [Valkey](https://github.com/valkey-io/valkey)'s Java client, derived from [Jedis](https://github.com/redis/jedis) fork, dedicated to maintaining simplicity and high performance.
+# Valkey-Java
+valkey-java is [Valkey](https://github.com/valkey-io/valkey)'s Java client, derived from [Jedis](https://github.com/redis/jedis) fork, dedicated to maintaining simplicity and high performance.
 
 
 # Getting started
 Add the following dependencies to your `pom.xml` file:
 ```
 <dependency>
-    <groupId>io.jackey</groupId>
-    <artifactId>jackey</artifactId>
-    <version>5.2.0</version>
+    <groupId>io.valkey</groupId>
+    <artifactId>valkey-java</artifactId>
+    <version>5.3.0(coming soon)</version>
 </dependency>
 ```
 
 ## Connect to Valkey
+
 ```java
-public class JackeyTest {
+public class ValkeyTest {
     // can be static or singleton, thread safety.
-    private static io.jackey.JedisPool jedisPool;
-    
+    private static io.valkey.JedisPool jedisPool;
+
     public static void main(String[] args) {
-        io.jackey.JedisPoolConfig config = new io.jackey.JedisPoolConfig();
+        io.valkey.JedisPoolConfig config = new io.valkey.JedisPoolConfig();
         // It is recommended that you set maxTotal = maxIdle = 2*minIdle for best performance
         config.setMaxTotal(32);
         config.setMaxIdle(32);
         config.setMinIdle(16);
-        jedisPool = new io.jackey.JedisPool(config, <host>, <port>, <timeout>, <password>);
-        try (io.jackey.Jedis jedis = jedisPool.getResource()) {
+        jedisPool = new io.valkey.JedisPool(config, < host >, <port >, <timeout >, <password >);
+        try (io.valkey.Jedis jedis = jedisPool.getResource()) {
             jedis.set("key", "value");
             System.out.println(jedis.get("key"));
         } catch (Exception e) {
@@ -37,18 +38,20 @@ public class JackeyTest {
 ```
 
 ## Connect to the Valkey cluster
+
 ```java
 import java.util.HashSet;
 import java.util.Set;
-import io.jackey.HostAndPort;
 
-public class JackeyClusterTest {
+import io.valkey.HostAndPort;
+
+public class ValkeyClusterTest {
     private static final int DEFAULT_TIMEOUT = 2000;
     private static final int DEFAULT_REDIRECTIONS = 5;
-    private static io.jackey.JedisCluster jc; // be static or singleton, thread safety.
+    private static io.valkey.JedisCluster jc; // be static or singleton, thread safety.
 
     public static void main(String[] args) {
-        io.jackey.ConnectionPoolConfig config = new io.jackey.ConnectionPoolConfig();
+        io.valkey.ConnectionPoolConfig config = new io.valkey.ConnectionPoolConfig();
         // It is recommended that you set maxTotal = maxIdle = 2*minIdle for best performance
         // In cluster mode, please note that each business machine will contain up to maxTotal links,
         // and the total number of connections = maxTotal * number of machines
@@ -58,11 +61,11 @@ public class JackeyClusterTest {
 
         Set<HostAndPort> jedisClusterNode = new HashSet<HostAndPort>();
         jedisClusterNode.add(new HostAndPort(host, port));
-        jc = new io.jackey.JedisCluster(jedisClusterNode, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT, DEFAULT_REDIRECTIONS,
+        jc = new io.valkey.JedisCluster(jedisClusterNode, DEFAULT_TIMEOUT, DEFAULT_TIMEOUT, DEFAULT_REDIRECTIONS,
             password, null, config);
 
         jc.set("key", "value"); // Note that there is no need to call jc.close() here, 
-                                // the connection recycling is actively completed internally.
+        // the connection recycling is actively completed internally.
         System.out.println(jc.get("key"));
 
         jc.close(); // when app exit, close the resource.
@@ -71,11 +74,13 @@ public class JackeyClusterTest {
 ```
 
 ## Connect using TLS method
+
 ```java
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.SecureRandom;
+
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
@@ -83,7 +88,7 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
-public class JackeySSLTest {
+public class ValkeySSLTest {
     private static SSLSocketFactory createTrustStoreSSLSocketFactory(String jksFile) throws Exception {
         KeyStore trustStore = KeyStore.getInstance("jks");
         InputStream inputStream = null;
@@ -105,11 +110,11 @@ public class JackeySSLTest {
 
     public static void main(String[] args) throws Exception {
         // When you don't have a jks file, just set sslSocketFactory to null.
-        final SSLSocketFactory sslSocketFactory = createTrustStoreSSLSocketFactory(<your_jks_file_path>);
-        io.jackey.JedisPool jedisPool = new io.jackey.JedisPool(new GenericObjectPoolConfig(), <host>,
-            <port>, <timeout>, <password>, 0, true, sslSocketFactory, null, null);
+        final SSLSocketFactory sslSocketFactory = createTrustStoreSSLSocketFactory( < your_jks_file_path >);
+        io.valkey.JedisPool jedisPool = new io.valkey.JedisPool(new GenericObjectPoolConfig(), < host >,
+            <port >, <timeout >, <password >, 0, true, sslSocketFactory, null, null);
 
-        try (io.jackey.Jedis jedis = pool.getResource()) {
+        try (io.valkey.Jedis jedis = pool.getResource()) {
             jedis.set("key", "value");
             System.out.println(jedis.get("key"));
         } catch (Exception e) {

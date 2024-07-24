@@ -1,0 +1,62 @@
+package io.valkey.resps;
+
+import java.io.Serializable;
+import java.util.Map;
+
+import io.valkey.StreamEntryID;
+
+/**
+ * This class holds information about a stream group. They can be accessed via getters. There is also
+ * {@link StreamGroupInfo#getGroupInfo()} method that returns a generic {@code Map} in case more
+ * info are returned from the server.
+ */
+public class StreamGroupInfo implements Serializable {
+
+  public static final String NAME = "name";
+  public static final String CONSUMERS = "consumers";
+  public static final String PENDING = "pending";
+  public static final String LAST_DELIVERED = "last-delivered-id";
+
+  private final String name;
+  private final long consumers;
+  private final long pending;
+  private final StreamEntryID lastDeliveredId;
+  private final Map<String, Object> groupInfo;
+
+  /**
+   * @param map contains key-value pairs with group info
+   */
+  public StreamGroupInfo(Map<String, Object> map) {
+
+    groupInfo = map;
+    name = (String) map.get(NAME);
+    consumers = (long) map.get(CONSUMERS);
+    pending = (long) map.get(PENDING);
+    lastDeliveredId = (StreamEntryID) map.get(LAST_DELIVERED);
+
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public long getConsumers() {
+    return consumers;
+  }
+
+  public long getPending() {
+    return pending;
+  }
+
+  public StreamEntryID getLastDeliveredId() {
+    return lastDeliveredId;
+  }
+
+  /**
+   * @return Generic map containing all key-value pairs returned by the server
+   */
+  public Map<String, Object> getGroupInfo() {
+    return groupInfo;
+  }
+
+}
