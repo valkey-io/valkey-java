@@ -3,12 +3,12 @@ valkey-java is [Valkey](https://github.com/valkey-io/valkey)'s Java client, deri
 
 
 # Getting started
-Add the following dependencies to your `pom.xml` file:
+Add the following dependencies to your `pom.xml` file, you can find the latest version of valkey-java at [Maven Central](https://central.sonatype.com/artifact/io.valkey/valkey-java).
 ```
 <dependency>
     <groupId>io.valkey</groupId>
     <artifactId>valkey-java</artifactId>
-    <version>5.3.0(coming soon)</version>
+    <version>5.3.0</version>
 </dependency>
 ```
 
