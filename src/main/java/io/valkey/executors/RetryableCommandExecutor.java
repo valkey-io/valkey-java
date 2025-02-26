@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import io.valkey.CommandObject;
 import io.valkey.Connection;
 import io.valkey.annots.VisibleForTesting;
+import io.valkey.exceptions.JedisThrottledDataException;
 import io.valkey.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +23,19 @@ public class RetryableCommandExecutor implements CommandExecutor {
   protected final ConnectionProvider provider;
   protected final int maxAttempts;
   protected final Duration maxTotalRetriesDuration;
+  protected final boolean retryOnThrottled;
 
   public RetryableCommandExecutor(ConnectionProvider provider, int maxAttempts,
       Duration maxTotalRetriesDuration) {
+    this(provider, maxAttempts, maxTotalRetriesDuration, false);
+  }
+
+  public RetryableCommandExecutor(ConnectionProvider provider, int maxAttempts,
+      Duration maxTotalRetriesDuration, boolean retryOnThrottled) {
     this.provider = provider;
     this.maxAttempts = maxAttempts;
     this.maxTotalRetriesDuration = maxTotalRetriesDuration;
+    this.retryOnThrottled = retryOnThrottled;
   }
 
   @Override
@@ -57,6 +65,11 @@ public class RetryableCommandExecutor implements CommandExecutor {
         boolean reset = handleConnectionProblem(attemptsLeft - 1, consecutiveConnectionFailures, deadline);
         if (reset) {
           consecutiveConnectionFailures = 0;
+        }
+      } catch (JedisThrottledDataException ex) {
+        if (retryOnThrottled) {
+          lastException = ex;
+          sleep(getBackoffSleepMillis(attemptsLeft, deadline));
         }
       } finally {
         if (connection != null) {

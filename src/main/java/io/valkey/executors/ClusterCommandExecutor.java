@@ -18,6 +18,7 @@ import io.valkey.exceptions.JedisClusterOperationException;
 import io.valkey.exceptions.JedisConnectionException;
 import io.valkey.exceptions.JedisMovedDataException;
 import io.valkey.exceptions.JedisRedirectionException;
+import io.valkey.exceptions.JedisThrottledDataException;
 import io.valkey.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +32,19 @@ public class ClusterCommandExecutor implements CommandExecutor {
   public final ClusterConnectionProvider provider;
   protected final int maxAttempts;
   protected final Duration maxTotalRetriesDuration;
+  protected final boolean retryOnThrottled;
 
   public ClusterCommandExecutor(ClusterConnectionProvider provider, int maxAttempts,
       Duration maxTotalRetriesDuration) {
+    this(provider, maxAttempts, maxTotalRetriesDuration, false);
+  }
+
+  public ClusterCommandExecutor(ClusterConnectionProvider provider, int maxAttempts,
+      Duration maxTotalRetriesDuration, boolean retryOnThrottled) {
     this.provider = provider;
     this.maxAttempts = maxAttempts;
     this.maxTotalRetriesDuration = maxTotalRetriesDuration;
+    this.retryOnThrottled = retryOnThrottled;
   }
 
   @Override
@@ -123,6 +131,11 @@ public class ClusterCommandExecutor implements CommandExecutor {
         if (jre instanceof JedisMovedDataException) {
           // it rebuilds cluster's slot cache recommended by Redis cluster specification
           provider.renewSlotCache(connection);
+        }
+      } catch (JedisThrottledDataException ex) {
+        if (retryOnThrottled) {
+          lastException = ex;
+          sleep(getBackoffSleepMillis(attemptsLeft, deadline));
         }
       } finally {
         IOUtils.closeQuietly(connection);

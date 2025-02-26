@@ -66,6 +66,7 @@ public final class Protocol {
   private static final String WRONGPASS_PREFIX = "WRONGPASS";
   private static final String NOPERM_PREFIX = "NOPERM";
   private static final String REDIRECT_PREFIX = "REDIRECT ";
+  private static final String THROTTLED_PREFIX = "THROTTLED ";
 
   private Protocol() {
     throw new InstantiationError("Must not instantiate this class");
@@ -114,6 +115,8 @@ public final class Protocol {
         || message.startsWith(WRONGPASS_PREFIX)
         || message.startsWith(NOPERM_PREFIX)) {
       throw new JedisAccessControlException(message);
+    } else if (message.startsWith(THROTTLED_PREFIX)) {
+      throw new JedisThrottledDataException(message);
     }
     throw new JedisDataException(message);
   }

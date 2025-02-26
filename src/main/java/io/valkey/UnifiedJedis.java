@@ -239,9 +239,21 @@ public class UnifiedJedis implements JedisCommands, JedisBinaryCommands,
         new ClusterCommandObjects());
   }
 
+  public UnifiedJedis(ClusterConnectionProvider provider, int maxAttempts, Duration maxTotalRetriesDuration,
+      boolean retryOnThrottled) {
+    this(new ClusterCommandExecutor(provider, maxAttempts, maxTotalRetriesDuration, retryOnThrottled), provider,
+        new ClusterCommandObjects());
+  }
+
   protected UnifiedJedis(ClusterConnectionProvider provider, int maxAttempts, Duration maxTotalRetriesDuration,
       RedisProtocol protocol) {
     this(new ClusterCommandExecutor(provider, maxAttempts, maxTotalRetriesDuration), provider,
+        new ClusterCommandObjects(), protocol);
+  }
+
+  public UnifiedJedis(ClusterConnectionProvider provider, int maxAttempts, Duration maxTotalRetriesDuration,
+      boolean retryOnThrottled, RedisProtocol protocol) {
+    this(new ClusterCommandExecutor(provider, maxAttempts, maxTotalRetriesDuration, retryOnThrottled), provider,
         new ClusterCommandObjects(), protocol);
   }
 
@@ -289,6 +301,11 @@ public class UnifiedJedis implements JedisCommands, JedisBinaryCommands,
 
   public UnifiedJedis(ConnectionProvider provider, int maxAttempts, Duration maxTotalRetriesDuration) {
     this(new RetryableCommandExecutor(provider, maxAttempts, maxTotalRetriesDuration), provider);
+  }
+
+  public UnifiedJedis(ConnectionProvider provider, int maxAttempts, Duration maxTotalRetriesDuration,
+      boolean retryOnThrottled) {
+    this(new RetryableCommandExecutor(provider, maxAttempts, maxTotalRetriesDuration, retryOnThrottled), provider);
   }
 
   /**
