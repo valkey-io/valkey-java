@@ -202,18 +202,18 @@ public class RedisJsonV1Test extends RedisModuleCommandsTestBase {
   @Test
   public void testJsonMerge() {
     // create data
-    List<String> childrens = new ArrayList<>();
-    childrens.add("Child 1");
-    Person person = new Person("John Doe", 25, "123 Main Street", "123-456-7890", childrens);
+    List<String> children = new ArrayList<>();
+    children.add("Child 1");
+    Person person = new Person("John Doe", 25, "123 Main Street", "123-456-7890", children);
     assertEquals("OK", jsonV1.jsonSet("test_merge", Path.ROOT_PATH, person));
 
     // After 5 years:
     person.age = 30;
-    person.childrens.add("Child 2");
-    person.childrens.add("Child 3");
+    person.children.add("Child 2");
+    person.children.add("Child 3");
 
     // merge the new data
-    assertEquals("OK", jsonV1.jsonMerge("test_merge", Path.of((".childrens")), person.childrens));
+    assertEquals("OK", jsonV1.jsonMerge("test_merge", Path.of((".children")), person.children));
     assertEquals("OK", jsonV1.jsonMerge("test_merge", Path.of((".age")), person.age));
     assertEquals(person, jsonV1.jsonGet("test_merge", Person.class));
   }

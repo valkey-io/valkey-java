@@ -117,14 +117,14 @@ public class JsonObjects {
     public int age;
     public String address;
     public String phone;
-    public List<String> childrens;
+    public List<String> children;
 
-    public Person(String name, int age, String address, String phone, List<String> childrens) {
+    public Person(String name, int age, String address, String phone, List<String> children) {
       this.name = name;
       this.age = age;
       this.address = address;
       this.phone = phone;
-      this.childrens = childrens;
+      this.children = children;
     }
 
     @Override
@@ -144,7 +144,7 @@ public class JsonObjects {
             && Objects.equals(age, other.age)
             && Objects.equals(address, other.address)
             && Objects.equals(phone, other.phone)
-            && Objects.equals(childrens, other.childrens);
+            && Objects.equals(children, other.children);
     }
   }
 
