@@ -275,7 +275,7 @@ public class PipeliningTest extends JedisCommandsTestBase {
   }
 
   @Test
-  public void piplineWithError() {
+  public void pipelineWithError() {
     Pipeline p = jedis.pipelined();
     p.set("foo", "bar");
     Response<Set<String>> error = p.smembers("foo");

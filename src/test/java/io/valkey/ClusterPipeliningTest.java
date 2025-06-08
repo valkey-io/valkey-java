@@ -395,7 +395,7 @@ public class ClusterPipeliningTest {
   }
 
   @Test
-  public void piplineWithError() {
+  public void pipelineWithError() {
     try (ClusterConnectionProvider provider = new ClusterConnectionProvider(nodes, DEFAULT_CLIENT_CONFIG)) {
       ClusterPipeline p = new ClusterPipeline(provider);
       p.set("foo", "bar");
