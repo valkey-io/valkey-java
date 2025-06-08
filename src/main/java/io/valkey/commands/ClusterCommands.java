@@ -117,7 +117,7 @@ public interface ClusterCommands {
    * attributes and their values for an individual link.
    *
    * @return the information of all such peer links as an array
-   * @see <a href="https://valkey.io/commands/cluster-links">CLUSTET LINKS</a>
+   * @see <a href="https://valkey.io/commands/cluster-links">CLUSTER LINKS</a>
    */
   List<Map<String, Object>> clusterLinks();
 
