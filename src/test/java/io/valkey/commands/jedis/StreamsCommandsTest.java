@@ -721,12 +721,12 @@ public class StreamsCommandsTest extends JedisCommandsTestBase {
       e.printStackTrace();
     }
 
-    List<StreamEntry> streamEntrys = jedis.xclaim(stream, "xpendeing-group",
+    List<StreamEntry> streamEntries = jedis.xclaim(stream, "xpendeing-group",
             "xpendeing-consumer2", 50, XClaimParams.xClaimParams().idle(0).retryCount(0),
             pendingRange.get(0).getID());
-    assertEquals(1, streamEntrys.size());
-    Assert.assertEquals(pendingRange.get(0).getID(), streamEntrys.get(0).getID());
-    assertEquals("v1", streamEntrys.get(0).getFields().get("f1"));
+    assertEquals(1, streamEntries.size());
+    Assert.assertEquals(pendingRange.get(0).getID(), streamEntries.get(0).getID());
+    assertEquals("v1", streamEntries.get(0).getFields().get("f1"));
   }
 
   @Test
@@ -782,11 +782,11 @@ public class StreamsCommandsTest extends JedisCommandsTestBase {
     }
 
     // Auto claim pending events to different consumer
-    Map.Entry<StreamEntryID, List<StreamEntry>> streamEntrys = jedis.xautoclaim("xpending-stream", "xpending-group",
+    Map.Entry<StreamEntryID, List<StreamEntry>> streamEntries = jedis.xautoclaim("xpending-stream", "xpending-group",
             "xpending-consumer2", 50, new StreamEntryID(), new XAutoClaimParams().count(1));
-    assertEquals(1, streamEntrys.getValue().size());
-    Assert.assertEquals(pendingRange.get(0).getID(), streamEntrys.getValue().get(0).getID());
-    assertEquals("v1", streamEntrys.getValue().get(0).getFields().get("f1"));
+    assertEquals(1, streamEntries.getValue().size());
+    Assert.assertEquals(pendingRange.get(0).getID(), streamEntries.getValue().get(0).getID());
+    assertEquals("v1", streamEntries.getValue().get(0).getFields().get("f1"));
   }
 
   @Test
@@ -812,10 +812,10 @@ public class StreamsCommandsTest extends JedisCommandsTestBase {
     }
 
     // Auto claim pending events to different consumer
-    List<Object> streamEntrys = jedis.xautoclaim(SafeEncoder.encode("xpending-stream"),
+    List<Object> streamEntries = jedis.xautoclaim(SafeEncoder.encode("xpending-stream"),
             SafeEncoder.encode("xpending-group"), SafeEncoder.encode("xpending-consumer2"),
             50, SafeEncoder.encode(new StreamEntryID().toString()), new XAutoClaimParams().count(1));
-    Map.Entry<StreamEntryID, List<StreamEntry>> res = BuilderFactory.STREAM_AUTO_CLAIM_RESPONSE.build(streamEntrys);
+    Map.Entry<StreamEntryID, List<StreamEntry>> res = BuilderFactory.STREAM_AUTO_CLAIM_RESPONSE.build(streamEntries);
     assertEquals(1, res.getValue().size());
     Assert.assertEquals(pendingRange.get(0).getID(), res.getValue().get(0).getID());
     assertEquals("v1", res.getValue().get(0).getFields().get("f1"));
@@ -844,11 +844,11 @@ public class StreamsCommandsTest extends JedisCommandsTestBase {
     }
 
     // Auto claim pending events to different consumer
-    Map.Entry<StreamEntryID, List<StreamEntryID>> streamEntrys = jedis.xautoclaimJustId("xpending-stream", "xpending-group",
+    Map.Entry<StreamEntryID, List<StreamEntryID>> streamEntries = jedis.xautoclaimJustId("xpending-stream", "xpending-group",
             "xpending-consumer2", 50, new StreamEntryID(), new XAutoClaimParams().count(1));
-    assertEquals(1, streamEntrys.getValue().size());
-    assertEquals(pendingRange.get(0).getID().getTime(), streamEntrys.getValue().get(0).getTime());
-    assertEquals(pendingRange.get(0).getID().getSequence(), streamEntrys.getValue().get(0).getSequence());
+    assertEquals(1, streamEntries.getValue().size());
+    assertEquals(pendingRange.get(0).getID().getTime(), streamEntries.getValue().get(0).getTime());
+    assertEquals(pendingRange.get(0).getID().getSequence(), streamEntries.getValue().get(0).getSequence());
   }
 
   @Test
@@ -874,10 +874,10 @@ public class StreamsCommandsTest extends JedisCommandsTestBase {
     }
 
     // Auto claim pending events to different consumer
-    List<Object> streamEntrys = jedis.xautoclaimJustId(SafeEncoder.encode("xpending-stream"),
+    List<Object> streamEntries = jedis.xautoclaimJustId(SafeEncoder.encode("xpending-stream"),
             SafeEncoder.encode("xpending-group"), SafeEncoder.encode("xpending-consumer2"),
             50, SafeEncoder.encode(new StreamEntryID().toString()), new XAutoClaimParams().count(1));
-    Map.Entry<StreamEntryID, List<StreamEntryID>> res = BuilderFactory.STREAM_AUTO_CLAIM_JUSTID_RESPONSE.build(streamEntrys);
+    Map.Entry<StreamEntryID, List<StreamEntryID>> res = BuilderFactory.STREAM_AUTO_CLAIM_JUSTID_RESPONSE.build(streamEntries);
     assertEquals(1, res.getValue().size());
     assertEquals(pendingRange.get(0).getID().getTime(), res.getValue().get(0).getTime());
     assertEquals(pendingRange.get(0).getID().getSequence(), res.getValue().get(0).getSequence());
