@@ -9,7 +9,7 @@ import io.valkey.resps.TrackingInfo;
 
 /**
  * The interface contain all the commands about client.
- * The params is String encoded in uft-8
+ * The params is String encoded in utf-8
  */
 public interface ClientCommands {
 
