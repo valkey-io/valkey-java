@@ -96,7 +96,7 @@ public class ClientCommandsTest extends JedisCommandsTestBase {
   }
 
   @Test
-  public void clientIdmultipleConnection() {
+  public void clientIdMultipleConnection() {
     try (Jedis client2 = new Jedis(hnp.getHost(), hnp.getPort(), 500)) {
       client2.auth("foobared");
       client2.clientSetname("fancy_jedis_another_name");
