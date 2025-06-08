@@ -88,7 +88,7 @@ public class JedisClusterInfoCache {
   /**
    * Check whether the number and order of slots in the cluster topology are equal to CLUSTER_HASHSLOTS
    * @param slotsInfo the cluster topology
-   * @return if slots is ok, return true, elese return false.
+   * @return if slots is ok, return true, else return false.
    */
   private boolean checkClusterSlotSequence(List<Object> slotsInfo) {
     List<Integer> slots = new ArrayList<>();
