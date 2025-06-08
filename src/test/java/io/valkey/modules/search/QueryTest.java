@@ -89,8 +89,8 @@
 //  @Test
 //  public void setScorer() throws Exception {
 //    assertEquals(null, query._scorer);
-//    assertEquals(query, query.setScorer("the.scroer"));
-//    assertEquals("the.scroer", query._scorer);
+//    assertEquals(query, query.setScorer("the.scorer"));
+//    assertEquals("the.scorer", query._scorer);
 //  }
 //
 //  @Test
