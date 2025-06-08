@@ -836,7 +836,7 @@ public class SearchTest extends RedisModuleCommandsTestBase {
   public void caseSensitiveTagField() {
     Schema sc = new Schema()
         .addTextField("title", 1.0)
-        .addTagField("category", true /*casesensitive*/);
+        .addTagField("category", true /*case-sensitive*/);
 
     assertEquals("OK", client.ftCreate(index, IndexOptions.defaultOptions(), sc));
 
