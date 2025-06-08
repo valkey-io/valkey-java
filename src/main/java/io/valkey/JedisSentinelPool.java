@@ -245,7 +245,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
         sentinelAvailable = true;
 
         if (masterAddr == null || masterAddr.size() != 2) {
-          LOG.warn("Can not get master addr, master name: {}. Sentinel: {}", masterName, sentinel);
+          LOG.warn("Cannot get master addr, master name: {}. Sentinel: {}", masterName, sentinel);
           continue;
         }
 
@@ -368,7 +368,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
           // code for active refresh
           List<String> masterAddr = j.sentinelGetMasterAddrByName(masterName);
           if (masterAddr == null || masterAddr.size() != 2) {
-            LOG.warn("Can not get master addr, master name: {}. Sentinel: {}.", masterName,
+            LOG.warn("Cannot get master addr, master name: {}. Sentinel: {}.", masterName,
                 hostPort);
           } else {
             initMaster(toHostAndPort(masterAddr));

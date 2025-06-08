@@ -215,7 +215,7 @@ public class SentineledConnectionProvider implements ConnectionProvider {
           // code for active refresh
           List<String> masterAddr = sentinelJedis.sentinelGetMasterAddrByName(masterName);
           if (masterAddr == null || masterAddr.size() != 2) {
-            LOG.warn("Can not get master {} address. Sentinel: {}.", masterName, node);
+            LOG.warn("Cannot get master {} address. Sentinel: {}.", masterName, node);
           } else {
             initMaster(toHostAndPort(masterAddr));
           }
