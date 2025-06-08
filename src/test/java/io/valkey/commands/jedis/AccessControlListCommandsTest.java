@@ -347,7 +347,7 @@ public class AccessControlListCommandsTest extends JedisCommandsTestBase {
     jedis.aclLogReset();
     assertTrue(jedis.aclLog().isEmpty());
 
-    // create new user and cconnect
+    // create new user and connect
     jedis.aclSetUser("antirez", ">foo", "on", "+set", "~object:1234");
     jedis.aclSetUser("antirez", "+eval", "+multi", "+exec");
     jedis.auth("antirez", "foo");
