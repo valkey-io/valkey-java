@@ -195,7 +195,7 @@ public class AccessControlListCommandsTest extends JedisCommandsTestBase {
   }
 
   @Test
-  public void aclExcudeSingleCommand() {
+  public void aclExcludeSingleCommand() {
     String status = jedis.aclSetUser(USER_NAME, "nopass");
     assertEquals("OK", status);
 
