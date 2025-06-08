@@ -59,7 +59,7 @@ public class MultiClusterPooledConnectionProvider implements ConnectionProvider 
     /**
      * Indicates the final cluster/database endpoint (connection pool), according to the pre-configured list
      * provided at startup via the MultiClusterClientConfig, is unavailable and therefore no further failover is possible.
-     * Users can manually failback to an available cluster which would reset this flag via {@link #setActiveMultiClusterIndex(int)}
+     * Users can manually fall back to an available cluster which would reset this flag via {@link #setActiveMultiClusterIndex(int)}
      */
     private volatile boolean lastClusterCircuitBreakerForcedOpen = false;
 

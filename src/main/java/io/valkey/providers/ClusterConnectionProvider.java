@@ -152,7 +152,7 @@ public class ClusterConnectionProvider implements ConnectionProvider {
       if (connectionPool != null) {
         return connectionPool.getResource();
       } else {
-        // no choice, fallback to new connection to random node
+        // no choice, fall back to new connection to random node
         return getConnection();
       }
     }
