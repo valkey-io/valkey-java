@@ -345,7 +345,7 @@ public class RedisJsonV1Test extends RedisModuleCommandsTestBase {
   }
 
   @Test
-  public void arrAppendAgaintsEmptyArray() {
+  public void arrAppendAgainstEmptyArray() {
     String json = "{ a: 'hello', b: [1, 2, 3], c: { d: [] }}";
     JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
 

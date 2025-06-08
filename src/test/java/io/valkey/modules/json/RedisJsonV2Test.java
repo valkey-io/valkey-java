@@ -373,7 +373,7 @@ public class RedisJsonV2Test extends RedisModuleCommandsTestBase {
   }
 
   @Test
-  public void arrAppendAgaintsEmptyArray() {
+  public void arrAppendAgainstEmptyArray() {
     String json = "{ a: 'hello', b: [1, 2, 3], c: { d: [] }}";
     jsonV2.jsonSet("test_arrappend", Path2.ROOT_PATH, new JSONObject(json));
     assertEquals(singletonList(3L), jsonV2.jsonArrAppendWithEscape("test_arrappend", Path2.of(".c.d"), "a", "b", "c"));
