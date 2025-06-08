@@ -4376,7 +4376,7 @@ public class CommandObjects {
   // RedisGears commands
 
   /**
-   * Get the instance for JsonObjectMapper if not null, otherwise a new instance reference with
+   * Get the instance for JsonObjectMapper if not null; otherwise, a new instance reference with
    * default implementation will be created and returned.
    * <p>This process of checking whether or not
    * the instance reference exists follows <a

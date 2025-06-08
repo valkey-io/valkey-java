@@ -78,7 +78,7 @@ public interface SetCommands {
   long scard(String key);
 
   /**
-   * Return true if member is a member of the set stored at key, otherwise false is returned.
+   * Return true if member is a member of the set stored at key; otherwise, false is returned.
    * <p>
    * Time complexity O(1)
    * @param key
@@ -245,7 +245,7 @@ public interface SetCommands {
    * for accessing clients.
    * <p>
    * If the source set does not exist or does not contain the specified element no operation is
-   * performed and zero is returned, otherwise the element is removed from the source set and added
+   * performed and zero is returned; otherwise, the element is removed from the source set and added
    * to the destination set. On success one is returned, even if the element was already present in
    * the destination set.
    * <p>

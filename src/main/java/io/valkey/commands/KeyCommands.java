@@ -74,7 +74,7 @@ public interface KeyCommands {
    * Time complexity: O(1) to access the key and additional O(N*M) to serialize it where N is
    * the number of Redis objects composing the value and M their average size.
    * @param key
-   * @param ttl If ttl is 0 the key is created without any expire, otherwise the specified expire
+   * @param ttl If ttl is 0 the key is created without any expire; otherwise, the specified expire
    *           time (in milliseconds) is set.
    * @param serializedValue
    * @return OK
@@ -89,7 +89,7 @@ public interface KeyCommands {
    * Time complexity: O(1) to access the key and additional O(N*M) to serialize it where N is
    * the number of Redis objects composing the value and M their average size.
    * @param key
-   * @param ttl If ttl is 0 the key is created without any expire, otherwise the specified expire
+   * @param ttl If ttl is 0 the key is created without any expire; otherwise, the specified expire
    *           time (in milliseconds) is set.
    * @param serializedValue
    * @param params {@link RestoreParams}

@@ -627,11 +627,11 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
   }
 
   /**
-   * Test if the specified key exists. The command returns true if the key exists, otherwise false is
+   * Test if the specified key exists. The command returns true if the key exists; otherwise, false is
    * returned. Note that even keys set with an empty string as value will return true. Time
    * complexity: O(1)
    * @param key
-   * @return {@code true} if the key exists, otherwise {@code false}
+   * @return {@code true} if the key exists; otherwise, {@code false}
    */
   @Override
   public boolean exists(final byte[] key) {
@@ -1230,7 +1230,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * @param field
    * @param value
    * @return If the field already exists, and the HSET just produced an update of the value, 0 is
-   *         returned, otherwise if a new field is created 1 is returned.
+   *         returned; otherwise, if a new field is created 1 is returned.
    */
   @Override
   public long hset(final byte[] key, final byte[] field, final byte[] value) {
@@ -1266,7 +1266,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * @param key
    * @param field
    * @param value
-   * @return If the field already exists, 0 is returned, otherwise if a new field is created 1 is
+   * @return If the field already exists, 0 is returned; otherwise, if a new field is created 1 is
    *         returned.
    */
   @Override
@@ -1368,7 +1368,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * <b>Time complexity:</b> O(1)
    * @param key
    * @param fields
-   * @return If the field was present in the hash it is deleted and 1 is returned, otherwise 0 is
+   * @return If the field was present in the hash it is deleted and 1 is returned; otherwise, 0 is
    *         returned and no operation is performed.
    */
   @Override
@@ -1861,7 +1861,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * for accessing clients.
    * <p>
    * If the source set does not exist or does not contain the specified element no operation is
-   * performed and zero is returned, otherwise the element is removed from the source set and added
+   * performed and zero is returned; otherwise, the element is removed from the source set and added
    * to the destination set. On success one is returned, even if the element was already present in
    * the destination set.
    * <p>
@@ -1892,7 +1892,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
   }
 
   /**
-   * Return true if member is a member of the set stored at key, otherwise false is returned.
+   * Return true if member is a member of the set stored at key; otherwise, false is returned.
    * <p>
    * Time complexity O(1)
    * @param key
@@ -5089,11 +5089,11 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
   }
 
   /**
-   * Test if the specified key exists. The command returns true if the key exists, otherwise false is
+   * Test if the specified key exists. The command returns true if the key exists; otherwise, false is
    * returned. Note that even keys set with an empty string as value will return true. Time
    * complexity: O(1)
    * @param key
-   * @return {@code true} if the key exists, otherwise {@code false}
+   * @return {@code true} if the key exists; otherwise, {@code false}
    */
   @Override
   public boolean exists(final String key) {
@@ -5691,7 +5691,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * @param field
    * @param value
    * @return If the field already exists, and the HSET just produced an update of the value, 0 is
-   *         returned, otherwise if a new field is created 1 is returned.
+   *         returned; otherwise, if a new field is created 1 is returned.
    */
   @Override
   public long hset(final String key, final String field, final String value) {
@@ -5727,7 +5727,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * @param key
    * @param field
    * @param value
-   * @return If the field already exists, 0 is returned, otherwise if a new field is created 1 is
+   * @return If the field already exists, 0 is returned; otherwise, if a new field is created 1 is
    *         returned.
    */
   @Override
@@ -6281,7 +6281,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
    * for accessing clients.
    * <p>
    * If the source set does not exist or does not contain the specified element no operation is
-   * performed and zero is returned, otherwise the element is removed from the source set and added
+   * performed and zero is returned; otherwise, the element is removed from the source set and added
    * to the destination set. On success one is returned, even if the element was already present in
    * the destination set.
    * <p>
@@ -6313,7 +6313,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
   }
 
   /**
-   * Return true if member is a member of the set stored at key, otherwise false is returned.
+   * Return true if member is a member of the set stored at key; otherwise, false is returned.
    * <p>
    * Time complexity O(1)
    * @param key
