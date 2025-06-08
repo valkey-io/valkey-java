@@ -9,7 +9,7 @@ public class ClientKillerUtil {
       if (clientInfo.contains("name=" + clientName)) {
         // Ugly, but c'mon, it's a test.
         String hostAndPortString = clientInfo.split(" ")[1].split("=")[1];
-        // It would be better if we kill the client by Id as it's safer but jedis doesn't implement
+        // It would be better if we kill the client by ID as it's safer but jedis doesn't implement
         // the command yet.
         jedis.clientKill(hostAndPortString);
       }
