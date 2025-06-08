@@ -107,7 +107,7 @@ public interface TDigestSketchCommands {
    * {@code TDIGEST.TRIMMED_MEAN key low_cut_quantile high_cut_quantile}
    *
    * @param key The name of the sketch (a t-digest data structure)
-   * @param lowCutQuantile Exclude observation values lower than this quantile
+   * @param lowCutQuantile Exclude observation values below this quantile
    * @param highCutQuantile Exclude observation values above this quantile
    * @return estimation of the mean value
    */
