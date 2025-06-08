@@ -38,7 +38,7 @@ public class CircuitBreakerFailoverBase implements AutoCloseable {
         if (!CircuitBreaker.State.FORCED_OPEN.equals(circuitBreaker.getState())) {
 
             // Transitions state machine to a FORCED_OPEN state, stopping state transition, metrics and event publishing.
-            // To recover/transition from this forced state the user will need to manually failback
+            // To recover/transition from this forced state the user will need to manually fallback
             circuitBreaker.transitionToForcedOpenState();
 
             // Incrementing the activeMultiClusterIndex will allow subsequent calls to the executeCommand()
@@ -49,7 +49,7 @@ public class CircuitBreakerFailoverBase implements AutoCloseable {
             provider.runClusterFailoverPostProcessor(activeMultiClusterIndex);
         }
 
-        // Once the priority list is exhausted only a manual failback can open the circuit breaker so all subsequent operations will fail
+        // Once the priority list is exhausted only a manual fallback can open the circuit breaker so all subsequent operations will fail
         else if (provider.isLastClusterCircuitBreakerForcedOpen()) {
             throw new JedisConnectionException("Cluster/database endpoint could not failover since the MultiClusterClientConfig was not " +
                                                "provided with an additional cluster/database endpoint according to its prioritized sequence. " +

@@ -21,7 +21,7 @@ import io.valkey.exceptions.JedisValidationException;
  * With this Config users can seamlessly failover to Disaster Recovery (DR), Backup, and Active-Active cluster(s)
  * by using simple configuration which is passed through from Resilience4j - https://resilience4j.readme.io/docs
  * <p>
- * Configuration options related to automatic failback (e.g. HALF_OPENED state) are not supported and therefore
+ * Configuration options related to automatic fallback (e.g. HALF_OPENED state) are not supported and therefore
  * not passed through to Jedis users.
  * <p>
  */
