@@ -1116,8 +1116,8 @@ public class CommandObjectsSortedSetCommandsTest extends CommandObjectsStandalon
         new Tuple(member1, score1),
         new Tuple(member2, score2)));
 
-    ScanResult<Tuple> resultBinar = exec(commandObjects.zscan(key.getBytes(), cursor.getBytes(), params));
-    assertThat(resultBinar.getResult(), containsInAnyOrder(
+    ScanResult<Tuple> resultBinary = exec(commandObjects.zscan(key.getBytes(), cursor.getBytes(), params));
+    assertThat(resultBinary.getResult(), containsInAnyOrder(
         new Tuple(member1, score1),
         new Tuple(member2, score2)));
   }
