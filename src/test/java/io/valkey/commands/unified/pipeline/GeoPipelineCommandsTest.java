@@ -40,7 +40,7 @@ public class GeoPipelineCommandsTest extends PipelineCommandsTestBase {
   protected final byte[] bA = { 0x0A };
   protected final byte[] bB = { 0x0B };
   protected final byte[] bC = { 0x0C };
-  protected final byte[] bNotexist = { 0x0F };
+  protected final byte[] bNonexistent = { 0x0F };
 
   private static final double EPSILON = 1e-5;
 
@@ -155,8 +155,8 @@ public class GeoPipelineCommandsTest extends PipelineCommandsTestBase {
   public void geohash() {
     prepareGeoData();
 
-    Response<List<String>> hashes = pipe.geohash("foo", "a", "b", "notexist");
-    Response<List<byte[]>> bhashes = pipe.geohash(bfoo, bA, bB, bNotexist);
+    Response<List<String>> hashes = pipe.geohash("foo", "a", "b", "nonexistent");
+    Response<List<byte[]>> bhashes = pipe.geohash(bfoo, bA, bB, bNonexistent);
 
     pipe.sync();
 
@@ -177,8 +177,8 @@ public class GeoPipelineCommandsTest extends PipelineCommandsTestBase {
   public void geopos() {
     prepareGeoData();
 
-    Response<List<GeoCoordinate>> coordinates = pipe.geopos("foo", "a", "b", "notexist");
-    Response<List<GeoCoordinate>> bcoordinates = pipe.geopos(bfoo, bA, bB, bNotexist);
+    Response<List<GeoCoordinate>> coordinates = pipe.geopos("foo", "a", "b", "nonexistent");
+    Response<List<GeoCoordinate>> bcoordinates = pipe.geopos(bfoo, bA, bB, bNonexistent);
 
     pipe.sync();
 

@@ -129,7 +129,7 @@ public class BloomTest extends RedisModuleCommandsTestBase {
     client.bfMAdd("simpleBloom", "foo", "bar", "baz", "bat", "bag");
 
     // Check if they exist:
-    List<Boolean> rv = client.bfMExists("simpleBloom", "foo", "bar", "baz", "bat", "Mark", "nonexist");
+    List<Boolean> rv = client.bfMExists("simpleBloom", "foo", "bar", "baz", "bat", "Mark", "nonexistent");
     // All items except the last one will be 'true'
     assertEquals(Arrays.asList(true, true, true, true, true, false), rv);
 

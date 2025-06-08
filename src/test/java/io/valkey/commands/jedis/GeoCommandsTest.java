@@ -29,7 +29,7 @@ public class GeoCommandsTest extends JedisCommandsTestBase {
   final byte[] bB = { 0x0B };
   final byte[] bC = { 0x0C };
   final byte[] bD = { 0x0D };
-  final byte[] bNotexist = { 0x0F };
+  final byte[] bNonexistent = { 0x0F };
 
   private static final double EPSILON = 1e-5;
 
@@ -125,14 +125,14 @@ public class GeoCommandsTest extends JedisCommandsTestBase {
   public void geohash() {
     prepareGeoData();
 
-    List<String> hashes = jedis.geohash("foo", "a", "b", "notexist");
+    List<String> hashes = jedis.geohash("foo", "a", "b", "nonexistent");
     assertEquals(3, hashes.size());
     assertEquals("s0dnu20t9j0", hashes.get(0));
     assertEquals("s093jd0k720", hashes.get(1));
     assertNull(hashes.get(2));
 
     // binary
-    List<byte[]> bhashes = jedis.geohash(bfoo, bA, bB, bNotexist);
+    List<byte[]> bhashes = jedis.geohash(bfoo, bA, bB, bNonexistent);
     assertEquals(3, bhashes.size());
     Assert.assertArrayEquals(SafeEncoder.encode("s0dnu20t9j0"), bhashes.get(0));
     assertArrayEquals(SafeEncoder.encode("s093jd0k720"), bhashes.get(1));
@@ -143,7 +143,7 @@ public class GeoCommandsTest extends JedisCommandsTestBase {
   public void geopos() {
     prepareGeoData();
 
-    List<GeoCoordinate> coordinates = jedis.geopos("foo", "a", "b", "notexist");
+    List<GeoCoordinate> coordinates = jedis.geopos("foo", "a", "b", "nonexistent");
     assertEquals(3, coordinates.size());
     assertEquals(3.0, coordinates.get(0).getLongitude(), EPSILON);
     assertEquals(4.0, coordinates.get(0).getLatitude(), EPSILON);
@@ -151,7 +151,7 @@ public class GeoCommandsTest extends JedisCommandsTestBase {
     assertEquals(3.0, coordinates.get(1).getLatitude(), EPSILON);
     assertNull(coordinates.get(2));
 
-    List<GeoCoordinate> bcoordinates = jedis.geopos(bfoo, bA, bB, bNotexist);
+    List<GeoCoordinate> bcoordinates = jedis.geopos(bfoo, bA, bB, bNonexistent);
     assertEquals(3, bcoordinates.size());
     assertEquals(3.0, bcoordinates.get(0).getLongitude(), EPSILON);
     assertEquals(4.0, bcoordinates.get(0).getLatitude(), EPSILON);

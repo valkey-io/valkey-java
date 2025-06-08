@@ -152,8 +152,8 @@ public interface ListCommands {
    * go from head to tail that is the normal behaviour. So for example LREM with count -2 and hello
    * as value to remove against the list (a,b,c,hello,x,hello,hello) will leave the list
    * (a,b,c,hello,x). The number of removed elements is returned as an integer, see below for more
-   * information about the returned value. Note that non existing keys are considered like empty
-   * lists by LREM, so LREM against non existing keys will always return 0.
+   * information about the returned value. Note that nonexistent keys are considered like empty
+   * lists by LREM, so LREM against nonexistent keys will always return 0.
    * <p>
    * Time complexity: O(N) (with N being the length of the list)
    * @param key
