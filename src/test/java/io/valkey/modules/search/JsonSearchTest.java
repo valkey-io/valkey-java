@@ -72,7 +72,7 @@ public class JsonSearchTest extends RedisModuleCommandsTestBase {
     Assert.assertEquals("OK", client.ftCreate(index, IndexOptions.defaultOptions().setDefinition(rule), schema));
 
 //    try (Jedis jedis = client.connection()) {
-//      setJson(jedis, "profesor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
+//      setJson(jedis, "professor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
 //      setJson(jedis, "student:1111", toJson("first", "Joe", "last", "Dod", "age", 18));
 //      setJson(jedis, "pupil:2222", toJson("first", "Jen", "last", "Rod", "age", 14));
 //      setJson(jedis, "student:3333", toJson("first", "El", "last", "Mark", "age", 17));
@@ -80,7 +80,7 @@ public class JsonSearchTest extends RedisModuleCommandsTestBase {
 //      setJson(jedis, "student:5555", toJson("first", "Joen", "last", "Ko", "age", 20));
 //      setJson(jedis, "teacher:6666", toJson("first", "Pat", "last", "Rod", "age", 20));
 //    }
-    setJson("profesor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
+    setJson("professor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
     setJson("student:1111", toJson("first", "Joe", "last", "Dod", "age", 18));
     setJson("pupil:2222", toJson("first", "Jen", "last", "Rod", "age", 14));
     setJson("student:3333", toJson("first", "El", "last", "Mark", "age", 17));
@@ -110,7 +110,7 @@ public class JsonSearchTest extends RedisModuleCommandsTestBase {
     Assert.assertEquals("OK", client.ftCreate(index, IndexOptions.defaultOptions().setDefinition(rule), schema));
 
 //    try (Jedis jedis = client.connection()) {
-//      setJson(jedis, "profesor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
+//      setJson(jedis, "professor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
 //      setJson(jedis, "student:1111", toJson("first", "Joe", "last", "Dod", "age", 18));
 //      setJson(jedis, "pupil:2222", toJson("first", "Jen", "last", "Rod", "age", 14));
 //      setJson(jedis, "student:3333", toJson("first", "El", "last", "Mark", "age", 17));
@@ -118,7 +118,7 @@ public class JsonSearchTest extends RedisModuleCommandsTestBase {
 //      setJson(jedis, "student:5555", toJson("first", "Joen", "last", "Ko", "age", 20));
 //      setJson(jedis, "teacher:6666", toJson("first", "Pat", "last", "Rod", "age", 20));
 //    }
-    setJson("profesor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
+    setJson("professor:5555", toJson("first", "Albert", "last", "Blue", "age", 55));
     setJson("student:1111", toJson("first", "Joe", "last", "Dod", "age", 18));
     setJson("pupil:2222", toJson("first", "Jen", "last", "Rod", "age", 14));
     setJson("student:3333", toJson("first", "El", "last", "Mark", "age", 17));

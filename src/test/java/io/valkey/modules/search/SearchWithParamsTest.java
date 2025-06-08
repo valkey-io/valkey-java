@@ -93,7 +93,7 @@ public class SearchWithParamsTest extends RedisModuleCommandsTestBase {
             .prefix("student:", "pupil:"),
         TextField.of("first"), TextField.of("last"), NumericField.of("age")));
 
-    client.hset("profesor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
+    client.hset("professor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
     client.hset("student:1111", toMap("first", "Joe", "last", "Dod", "age", "18"));
     client.hset("pupil:2222", toMap("first", "Jen", "last", "Rod", "age", "14"));
     client.hset("student:3333", toMap("first", "El", "last", "Mark", "age", "17"));
@@ -147,7 +147,7 @@ public class SearchWithParamsTest extends RedisModuleCommandsTestBase {
         TextField.of("first").as("given"),
         TextField.of(FieldName.of("last").as("family"))));
 
-    client.hset("profesor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
+    client.hset("professor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
     client.hset("student:1111", toMap("first", "Joe", "last", "Dod", "age", "18"));
     client.hset("pupil:2222", toMap("first", "Jen", "last", "Rod", "age", "14"));
     client.hset("student:3333", toMap("first", "El", "last", "Mark", "age", "17"));
@@ -1299,7 +1299,7 @@ public class SearchWithParamsTest extends RedisModuleCommandsTestBase {
     AssertUtil.assertOK(client.ftCreate(index, FTCreateParams.createParams(),
         TextField.of("first"), TextField.of("last"), NumericField.of("age")));
 
-    client.hset("profesor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
+    client.hset("professor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
     client.hset("student:1111", toMap("first", "Joe", "last", "Dod", "age", "18"));
     client.hset("pupil:2222", toMap("first", "Jen", "last", "Rod", "age", "14"));
     client.hset("student:3333", toMap("first", "El", "last", "Mark", "age", "17"));
@@ -1323,7 +1323,7 @@ public class SearchWithParamsTest extends RedisModuleCommandsTestBase {
     AssertUtil.assertOK(client.ftCreate(index, FTCreateParams.createParams(),
         TextField.of("first"), TextField.of("last"), NumericField.of("age")));
 
-    client.hset("profesor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
+    client.hset("professor:5555", toMap("first", "Albert", "last", "Blue", "age", "55"));
     client.hset("student:1111", toMap("first", "Joe", "last", "Dod", "age", "18"));
     client.hset("pupil:2222", toMap("first", "Jen", "last", "Rod", "age", "14"));
     client.hset("student:3333", toMap("first", "El", "last", "Mark", "age", "17"));
@@ -1334,7 +1334,7 @@ public class SearchWithParamsTest extends RedisModuleCommandsTestBase {
     ArrayList<Document> collect = new ArrayList<>();
     client.ftSearchIteration(3, index, "*", FTSearchParams.searchParams()).collect(collect);
     assertEquals(7, collect.size());
-    assertEquals(Arrays.asList("profesor:5555", "student:1111", "pupil:2222", "student:3333",
+    assertEquals(Arrays.asList("professor:5555", "student:1111", "pupil:2222", "student:3333",
         "pupil:4444", "student:5555", "teacher:6666").stream().collect(Collectors.toSet()),
         collect.stream().map(Document::getId).collect(Collectors.toSet()));
   }
