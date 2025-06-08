@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class ZIncrByParams implements IParams {
 
-  private Keyword existance;
+  private Keyword existence;
 
   public ZIncrByParams() {
   }
@@ -31,7 +31,7 @@ public class ZIncrByParams implements IParams {
    * @return ZIncrByParams
    */
   public ZIncrByParams nx() {
-    this.existance = Keyword.NX;
+    this.existence = Keyword.NX;
     return this;
   }
 
@@ -40,14 +40,14 @@ public class ZIncrByParams implements IParams {
    * @return ZIncrByParams
    */
   public ZIncrByParams xx() {
-    this.existance = Keyword.XX;
+    this.existence = Keyword.XX;
     return this;
   }
 
   @Override
   public void addParams(CommandArguments args) {
-    if (existance != null) {
-      args.add(existance);
+    if (existence != null) {
+      args.add(existence);
     }
 
     args.add(Keyword.INCR);
@@ -58,11 +58,11 @@ public class ZIncrByParams implements IParams {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     ZIncrByParams that = (ZIncrByParams) o;
-    return existance == that.existance;
+    return existence == that.existence;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(existance);
+    return Objects.hash(existence);
   }
 }

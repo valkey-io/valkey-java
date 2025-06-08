@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class SetParams implements IParams {
 
-  private Keyword existance;
+  private Keyword existence;
   private Keyword expiration;
   private Long expirationValue;
 
@@ -23,7 +23,7 @@ public class SetParams implements IParams {
    * @return SetParams
    */
   public SetParams nx() {
-    this.existance = Keyword.NX;
+    this.existence = Keyword.NX;
     return this;
   }
 
@@ -32,7 +32,7 @@ public class SetParams implements IParams {
    * @return SetParams
    */
   public SetParams xx() {
-    this.existance = Keyword.XX;
+    this.existence = Keyword.XX;
     return this;
   }
 
@@ -97,8 +97,8 @@ public class SetParams implements IParams {
 
   @Override
   public void addParams(CommandArguments args) {
-    if (existance != null) {
-      args.add(existance);
+    if (existence != null) {
+      args.add(existence);
     }
 
     if (expiration != null) {
@@ -114,12 +114,12 @@ public class SetParams implements IParams {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     SetParams setParams = (SetParams) o;
-    return Objects.equals(existance, setParams.existance) && Objects.equals(expiration, setParams.expiration)
+    return Objects.equals(existence, setParams.existence) && Objects.equals(expiration, setParams.expiration)
             && Objects.equals(expirationValue, setParams.expirationValue);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(existance, expiration, expirationValue);
+    return Objects.hash(existence, expiration, expirationValue);
   }
 }
