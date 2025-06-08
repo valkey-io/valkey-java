@@ -102,7 +102,7 @@ public class SortingParams implements IParams {
   }
 
   /**
-   * Sort lexicographicaly. Note that Redis is utf-8 aware assuming you set the right value for the
+   * Sort lexicographically. Note that Redis is utf-8 aware assuming you set the right value for the
    * LC_COLLATE environment variable.
    * @return the SortingParams Object
    */
