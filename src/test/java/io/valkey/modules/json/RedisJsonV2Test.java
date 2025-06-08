@@ -232,7 +232,7 @@ public class RedisJsonV2Test extends RedisModuleCommandsTestBase {
 
     assertJsonArrayEquals(jsonArray(json), jsonV2.jsonGet("test_merge", Path2.of("$")));
 
-    // Test with root path path $.a.b
+    // Test with root path $.a.b
     assertEquals("OK", jsonV2.jsonMerge("test_merge", Path2.of("$.person.address"), "{\"work\":\"Redis office\"}"));
     json = new JSONObject("{\"person\":{\"name\":\"John Doe\",\"age\":30,\"address\":{\"home\":\"123 Main Street\",\"work\":\"Redis office\"},\"phone\":\"123-456-7890\"}}");
     assertJsonArrayEquals(jsonArray(json), jsonV2.jsonGet("test_merge", Path2.of("$")));
