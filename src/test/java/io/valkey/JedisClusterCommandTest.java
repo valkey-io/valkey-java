@@ -201,8 +201,8 @@
 //    // reached.
 //    JedisSlotBasedConnectionHandler connectionHandler = mock(JedisSlotBasedConnectionHandler.class);
 //
-//    final Jedis redirecter = mock(Jedis.class);
-//    when(connectionHandler.getConnectionFromSlot(anyInt())).thenReturn(redirecter);
+//    final Jedis redirector = mock(Jedis.class);
+//    when(connectionHandler.getConnectionFromSlot(anyInt())).thenReturn(redirector);
 //
 //    final Jedis failer = mock(Jedis.class);
 //    when(connectionHandler.getConnectionFromNode(any(HostAndPort.class))).thenReturn(failer);
@@ -217,7 +217,7 @@
 //        ONE_SECOND) {
 //      @Override
 //      public String execute(Jedis connection) {
-//        if (redirecter == connection) {
+//        if (redirector == connection) {
 //          // First attempt, report moved
 //          throw new JedisMovedDataException("Moved", movedTarget, 0);
 //        }
@@ -244,7 +244,7 @@
 //    }
 //    InOrder inOrder = inOrder(connectionHandler, sleep);
 //    inOrder.verify(connectionHandler).getConnectionFromSlot(anyInt());
-//    inOrder.verify(connectionHandler).renewSlotCache(redirecter);
+//    inOrder.verify(connectionHandler).renewSlotCache(redirector);
 //    inOrder.verify(connectionHandler, times(2)).getConnectionFromNode(movedTarget);
 //    inOrder.verify(sleep).accept(anyLong());
 //    inOrder.verify(connectionHandler).renewSlotCache();

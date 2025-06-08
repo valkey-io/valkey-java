@@ -187,8 +187,8 @@ public class ClusterCommandExecutorTest {
     // reached.
     ClusterConnectionProvider connectionHandler = mock(ClusterConnectionProvider.class);
 
-    final Connection redirecter = mock(Connection.class);
-    when(connectionHandler.getConnection(STR_COM_OBJECT.getArguments())).thenReturn(redirecter);
+    final Connection redirector = mock(Connection.class);
+    when(connectionHandler.getConnection(STR_COM_OBJECT.getArguments())).thenReturn(redirector);
 
     final Connection failer = mock(Connection.class);
     when(connectionHandler.getConnection(ArgumentMatchers.any(HostAndPort.class))).thenReturn(failer);
@@ -202,7 +202,7 @@ public class ClusterCommandExecutorTest {
     ClusterCommandExecutor testMe = new ClusterCommandExecutor(connectionHandler, 5, ONE_SECOND) {
       @Override
       public <T> T execute(Connection connection, CommandObject<T> commandObject) {
-        if (redirecter == connection) {
+        if (redirector == connection) {
           // First attempt, report moved
           throw new JedisMovedDataException("Moved", movedTarget, 0);
         }
@@ -229,7 +229,7 @@ public class ClusterCommandExecutorTest {
     }
     InOrder inOrder = inOrder(connectionHandler, sleep);
     inOrder.verify(connectionHandler).getConnection(STR_COM_OBJECT.getArguments());
-    inOrder.verify(connectionHandler).renewSlotCache(redirecter);
+    inOrder.verify(connectionHandler).renewSlotCache(redirector);
     inOrder.verify(connectionHandler, times(2)).getConnection(movedTarget);
     inOrder.verify(sleep).accept(ArgumentMatchers.anyLong());
     inOrder.verify(connectionHandler).renewSlotCache();
