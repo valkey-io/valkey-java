@@ -25,7 +25,7 @@ public abstract class BitCommandsTestBase extends UnifiedJedisCommandsTestBase {
   }
 
   @Test
-  public void setAndgetbit() {
+  public void setAndGetBit() {
     assertFalse(jedis.setbit("foo", 0, true));
 
     assertTrue(jedis.getbit("foo", 0));
