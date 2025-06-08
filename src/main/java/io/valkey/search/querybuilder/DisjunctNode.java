@@ -9,7 +9,7 @@ package io.valkey.search.querybuilder;
  *
  * {@code -(@f1:v1 @f2:v2)}
  *
- * @see DisjunctUnionNode which evalutes to true if <b>all</b> its children are false.
+ * @see DisjunctUnionNode which evaluates to true if <b>all</b> its children are false.
  */
 public class DisjunctNode extends IntersectNode {
   @Override
