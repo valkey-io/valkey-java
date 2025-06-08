@@ -89,7 +89,7 @@ public class RetryableCommandExecutor implements CommandExecutor {
 
   /**
    * WARNING: This method is accessible for the purpose of testing.
-   * This should not be used or overriden.
+   * This should not be used or overridden.
    */
   @VisibleForTesting
   protected <T> T execute(Connection connection, CommandObject<T> commandObject) {
@@ -130,7 +130,7 @@ public class RetryableCommandExecutor implements CommandExecutor {
 
   /**
    * WARNING: This method is accessible for the purpose of testing.
-   * This should not be used or overriden.
+   * This should not be used or overridden.
    */
   @VisibleForTesting
   protected void sleep(long sleepMillis) {
