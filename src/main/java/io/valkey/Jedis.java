@@ -5527,7 +5527,7 @@ public class Jedis implements ServerCommands, DatabaseCommands, JedisCommands, J
   }
 
   /**
-   * DECRBY work just like {@link Jedis#decr(String) INCR} but instead to decrement by 1 the
+   * DECRBY works just like {@link Jedis#decr(String) INCR} but instead to decrement by 1 the
    * decrement is integer.
    * <p>
    * INCR commands are limited to 64-bit signed integers.
