@@ -1479,7 +1479,7 @@ public class SortedSetPipelineCommandsTest extends PipelineCommandsTestBase {
   }
 
   @Test
-  public void zintertoreParams() {
+  public void zinterstoreParams() {
     pipe.zadd("foo", 1, "a");
     pipe.zadd("foo", 2, "b");
     pipe.zadd("bar", 2, "a");

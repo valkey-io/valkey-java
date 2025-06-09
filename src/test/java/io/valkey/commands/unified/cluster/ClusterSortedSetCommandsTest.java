@@ -139,7 +139,7 @@ public class ClusterSortedSetCommandsTest extends SortedSetCommandsTestBase {
 
   @Test
   @Override
-  public void zintertoreParams() {
+  public void zinterstoreParams() {
     jedis.zadd("foo{:}", 1, "a");
     jedis.zadd("foo{:}", 2, "b");
     jedis.zadd("bar{:}", 2, "a");
