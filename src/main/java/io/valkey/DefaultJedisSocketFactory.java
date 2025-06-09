@@ -67,7 +67,7 @@ public class DefaultJedisSocketFactory implements JedisSocketFactory {
 
         socket.setReuseAddress(true);
         socket.setKeepAlive(true); // Will monitor the TCP connection is valid
-        socket.setTcpNoDelay(true); // Socket buffer Whetherclosed, to ensure timely delivery of data
+        socket.setTcpNoDelay(true); // Socket buffer option, to ensure timely delivery of data
         socket.setSoLinger(true, 0); // Control calls close () method, the underlying socket is closed immediately
 
         // Passing 'host' directly will avoid another call to InetAddress.getByName() inside the InetSocketAddress constructor.
