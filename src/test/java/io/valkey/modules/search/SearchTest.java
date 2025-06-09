@@ -1190,7 +1190,7 @@ public class SearchTest extends RedisModuleCommandsTestBase {
   }
 
   @Test
-  public void testHNSWVVectorSimilarity() {
+  public void testHNSWVectorSimilarity() {
     Map<String, Object> attr = new HashMap<>();
     attr.put("TYPE", "FLOAT32");
     attr.put("DIM", 2);
