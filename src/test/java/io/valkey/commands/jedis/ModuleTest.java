@@ -44,7 +44,13 @@ public class ModuleTest extends JedisCommandsTestBase {
 
       List<Module> modules = jedis.moduleList();
 
-      assertEquals("testmodule", modules.get(0).getName());
+      boolean contains = false;
+      for (Module module: modules) {
+        if (module.getName().equals("testmodule")) {
+          contains = true;
+        }
+      }
+      assertTrue(contains);
 
       Object output = jedis.sendCommand(ModuleCommand.SIMPLE);
       assertTrue((Long) output > 0);
@@ -52,7 +58,8 @@ public class ModuleTest extends JedisCommandsTestBase {
     } finally {
 
       assertEquals("OK", jedis.moduleUnload("testmodule"));
-      assertEquals(Collections.emptyList(), jedis.moduleList());
+      // After this PR: https://github.com/valkey-io/valkey/pull/2858, libvalkeylua.so is the default module
+      //assertEquals(Collections.emptyList(), jedis.moduleList());
     }
   }
 }
