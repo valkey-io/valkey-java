@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.valkey.CommandArguments;
@@ -21,11 +24,37 @@ import org.slf4j.LoggerFactory;
 import io.valkey.exceptions.JedisConnectionException;
 import io.valkey.exceptions.JedisException;
 
+/**
+ * Sentinel-mode connection provider that combines two complementary failover-detection
+ * strategies:
+ *
+ * <ol>
+ *   <li><b>Pub/Sub broadcast listener</b> (existing): each {@link SentinelListener} thread
+ *       subscribes to the {@code +switch-master} channel on its sentinel node and calls
+ *       {@link #initMaster} immediately when a failover event is published.</li>
+ *   <li><b>Periodic active probe</b> (new, feature/failover-enhancement): a separate
+ *       single-threaded scheduler calls {@code SENTINEL GETMASTERADDRBYNAME} on every
+ *       sentinel at a configurable interval.  This ensures that failovers are detected even
+ *       when the Pub/Sub connection is temporarily disrupted or when the sentinel does not
+ *       publish a notification (e.g. due to a network partition).</li>
+ * </ol>
+ *
+ * <p>The probe interval defaults to {@value #DEFAULT_PROBE_PERIOD_MILLIS} ms and can be
+ * customised via the constructor that accepts {@code probePeriodMillis}.  Set the interval
+ * to {@code 0} or a negative value to disable the active probe entirely.</p>
+ */
 public class SentineledConnectionProvider implements ConnectionProvider {
 
   private static final Logger LOG = LoggerFactory.getLogger(SentineledConnectionProvider.class);
 
   protected static final long DEFAULT_SUBSCRIBE_RETRY_WAIT_TIME_MILLIS = 5000;
+
+  /**
+   * Default interval (ms) for the periodic active-probe task.
+   * 10 seconds is a reasonable default: fast enough to catch missed events,
+   * slow enough not to flood sentinels with queries.
+   */
+  public static final long DEFAULT_PROBE_PERIOD_MILLIS = 10_000L;
 
   private volatile HostAndPort currentMaster;
 
@@ -43,7 +72,26 @@ public class SentineledConnectionProvider implements ConnectionProvider {
 
   private final long subscribeRetryWaitTimeMillis;
 
+  /**
+   * Interval (ms) for the active-probe scheduler.  {@code <= 0} disables the probe.
+   */
+  private final long probePeriodMillis;
+
+  /**
+   * The sentinel nodes used for active probing (same set as the listeners).
+   */
+  private volatile Set<HostAndPort> sentinelNodes;
+
+  /**
+   * Single-threaded scheduler that periodically queries sentinels for the current master.
+   */
+  private ScheduledExecutorService probeExecutor = null;
+
   private final Object initPoolLock = new Object();
+
+  // -------------------------------------------------------------------------
+  // Constructors
+  // -------------------------------------------------------------------------
 
   public SentineledConnectionProvider(String masterName, final JedisClientConfig masterClientConfig,
       Set<HostAndPort> sentinels, final JedisClientConfig sentinelClientConfig) {
@@ -61,6 +109,20 @@ public class SentineledConnectionProvider implements ConnectionProvider {
       final GenericObjectPoolConfig<Connection> poolConfig,
       Set<HostAndPort> sentinels, final JedisClientConfig sentinelClientConfig,
       final long subscribeRetryWaitTimeMillis) {
+    this(masterName, masterClientConfig, poolConfig, sentinels, sentinelClientConfig,
+        subscribeRetryWaitTimeMillis, DEFAULT_PROBE_PERIOD_MILLIS);
+  }
+
+  /**
+   * Full constructor that exposes the active-probe interval.
+   *
+   * @param probePeriodMillis interval between active-probe cycles in milliseconds;
+   *                          {@code <= 0} disables the active probe
+   */
+  public SentineledConnectionProvider(String masterName, final JedisClientConfig masterClientConfig,
+      final GenericObjectPoolConfig<Connection> poolConfig,
+      Set<HostAndPort> sentinels, final JedisClientConfig sentinelClientConfig,
+      final long subscribeRetryWaitTimeMillis, final long probePeriodMillis) {
 
     this.masterName = masterName;
     this.masterClientConfig = masterClientConfig;
@@ -68,10 +130,19 @@ public class SentineledConnectionProvider implements ConnectionProvider {
 
     this.sentinelClientConfig = sentinelClientConfig;
     this.subscribeRetryWaitTimeMillis = subscribeRetryWaitTimeMillis;
+    this.probePeriodMillis = probePeriodMillis;
 
     HostAndPort master = initSentinels(sentinels);
     initMaster(master);
+
+    if (probePeriodMillis > 0) {
+      startActiveProbe(sentinels);
+    }
   }
+
+  // -------------------------------------------------------------------------
+  // ConnectionProvider interface
+  // -------------------------------------------------------------------------
 
   @Override
   public Connection getConnection() {
@@ -86,13 +157,17 @@ public class SentineledConnectionProvider implements ConnectionProvider {
   @Override
   public void close() {
     sentinelListeners.forEach(SentinelListener::shutdown);
-
+    stopActiveProbe();
     pool.close();
   }
 
   public HostAndPort getCurrentMaster() {
     return currentMaster;
   }
+
+  // -------------------------------------------------------------------------
+  // Master pool management
+  // -------------------------------------------------------------------------
 
   private void initMaster(HostAndPort master) {
     synchronized (initPoolLock) {
@@ -116,6 +191,10 @@ public class SentineledConnectionProvider implements ConnectionProvider {
       }
     }
   }
+
+  // -------------------------------------------------------------------------
+  // Sentinel initialisation
+  // -------------------------------------------------------------------------
 
   private HostAndPort initSentinels(Set<HostAndPort> sentinels) {
 
@@ -175,6 +254,84 @@ public class SentineledConnectionProvider implements ConnectionProvider {
     return master;
   }
 
+  // -------------------------------------------------------------------------
+  // Active probe scheduler
+  // -------------------------------------------------------------------------
+
+  /**
+   * Start the periodic active-probe scheduler.
+   *
+   * <p>The probe task iterates over all sentinel nodes and calls
+   * {@code SENTINEL GETMASTERADDRBYNAME} on the first reachable one.  If the returned
+   * master address differs from {@link #currentMaster} the pool is updated immediately,
+   * providing a safety net for cases where the Pub/Sub notification was missed.</p>
+   *
+   * @param sentinels the set of sentinel nodes to probe
+   */
+  private void startActiveProbe(Set<HostAndPort> sentinels) {
+    this.sentinelNodes = sentinels;
+    probeExecutor = Executors.newSingleThreadScheduledExecutor(r -> {
+      Thread t = new Thread(r, "SentinelActiveProbe-" + masterName);
+      t.setDaemon(true);
+      return t;
+    });
+    probeExecutor.scheduleWithFixedDelay(
+        new ActiveProbeTask(),
+        probePeriodMillis,
+        probePeriodMillis,
+        TimeUnit.MILLISECONDS);
+    LOG.info("Sentinel active probe started for master '{}', interval={}ms.", masterName, probePeriodMillis);
+  }
+
+  private void stopActiveProbe() {
+    if (probeExecutor != null) {
+      probeExecutor.shutdownNow();
+      probeExecutor = null;
+      LOG.info("Sentinel active probe stopped for master '{}'.", masterName);
+    }
+  }
+
+  /**
+   * Runnable executed by the active-probe scheduler.
+   * Queries each sentinel in turn until one responds, then updates the master pool if needed.
+   */
+  private class ActiveProbeTask implements Runnable {
+
+    @Override
+    public void run() {
+      if (sentinelNodes == null) return;
+
+      for (HostAndPort sentinel : sentinelNodes) {
+        try (Jedis jedis = new Jedis(sentinel, sentinelClientConfig)) {
+          List<String> masterAddr = jedis.sentinelGetMasterAddrByName(masterName);
+          if (masterAddr != null && masterAddr.size() == 2) {
+            HostAndPort probedMaster = toHostAndPort(masterAddr);
+            if (!probedMaster.equals(currentMaster)) {
+              LOG.info(
+                  "Active probe detected master change for '{}': {} -> {}. Updating pool.",
+                  masterName, currentMaster, probedMaster);
+              initMaster(probedMaster);
+            } else {
+              LOG.debug("Active probe: master '{}' still at {}.", masterName, currentMaster);
+            }
+            // Successfully queried one sentinel – no need to try the rest.
+            return;
+          } else {
+            LOG.warn("Active probe: sentinel {} returned no address for master '{}'.", sentinel, masterName);
+          }
+        } catch (JedisException e) {
+          LOG.warn("Active probe: could not reach sentinel {}. Trying next.", sentinel, e);
+        }
+      }
+
+      LOG.warn("Active probe: all sentinels unreachable for master '{}'.", masterName);
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // Helpers
+  // -------------------------------------------------------------------------
+
   /**
    * Must be of size 2.
    */
@@ -186,6 +343,18 @@ public class SentineledConnectionProvider implements ConnectionProvider {
     return new HostAndPort(hostStr, Integer.parseInt(portStr));
   }
 
+  // -------------------------------------------------------------------------
+  // SentinelListener inner class
+  // -------------------------------------------------------------------------
+
+  /**
+   * Background thread that subscribes to the {@code +switch-master} Pub/Sub channel on a
+   * single sentinel node.  When a failover event is published the thread immediately calls
+   * {@link #initMaster} to switch the connection pool to the new master.
+   *
+   * <p>The thread reconnects automatically after connection failures, sleeping
+   * {@link #subscribeRetryWaitTimeMillis} ms between attempts.</p>
+   */
   protected class SentinelListener extends Thread {
 
     protected final HostAndPort node;
@@ -212,7 +381,8 @@ public class SentineledConnectionProvider implements ConnectionProvider {
 
           sentinelJedis = new Jedis(node, sentinelClientConfig);
 
-          // code for active refresh
+          // Perform an active refresh immediately on (re-)connect so that any failover
+          // that happened while the listener was disconnected is not missed.
           List<String> masterAddr = sentinelJedis.sentinelGetMasterAddrByName(masterName);
           if (masterAddr == null || masterAddr.size() != 2) {
             LOG.warn("Cannot get master {} address. Sentinel: {}.", masterName, node);
